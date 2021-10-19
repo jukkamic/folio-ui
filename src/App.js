@@ -28,7 +28,7 @@ function countTotal(data) {
   return total;
 }
 
-function parseSymbolsValues(data, total) {
+function parseSymbolsValues(data, total, hideSmall) {
   const values = [];
   const symbols = [];
   const sorted = Object.entries(data).sort( function (a,b) {
@@ -36,9 +36,11 @@ function parseSymbolsValues(data, total) {
   });
   for (const entry of Object.entries(sorted)) {
     const val = parseFloat(entry[1][1]["value"]);
-    const share = (val / total) * 100.00;
-    symbols.push(entry[1][1]["asset"] + " " + (share.toPrecision(2)).toString() + "%");
-    values.push(val);
+    if( !(hideSmall && (val < 10)) ) {
+      const share = (val / total) * 100.00;
+      symbols.push(entry[1][1]["asset"] + " " + (share.toPrecision(2)).toString() + "%");
+      values.push(val);
+    }
   }
   return [symbols, values];
 }
@@ -57,8 +59,7 @@ async function fetchNews(kind, filter) {
 }
   
 async function fetchWalletData(hideSmall) {
-  const res = await axios.get(WALLET_URL,
-                              { params: {"hideSmall": hideSmall} } );
+  const res = await axios.get(WALLET_URL);
   return res.data;
 }
 
@@ -80,10 +81,11 @@ function App() {
     fetchWalletData(hideSmall).then( data => {
       setWalletData(data);
       const total = countTotal(data);
-      const [symbols, values] = parseSymbolsValues(data, total);  
+      const [symbols, values] = parseSymbolsValues(data, total, hideSmall);  
       setSymbols(symbols);
       setValues(values);
-      setTitle(("Total " + total.toPrecision(6)).toString() + " USDT");  
+      const round_total = Math.round(parseFloat((total) + Number.EPSILON) * 100) / 100;
+      setTitle("Total " + Intl.NumberFormat('en-US').format(round_total) + " USDT");  
     }).catch(err => {
       console.log(err);
     })
@@ -121,10 +123,6 @@ function App() {
 
   const handlePriceBoxToggle = () => setMovePriceTicker(!movePriceTicker);
   const handleHideSmall = () => setHideSmall(!hideSmall);
-  // const handleTickerMove = (id) => {
-  //   moveTicker[id] = !moveTicker[id];
-  //   setMoveTicker(moveTicker);
-  // } 
 
   return (
     <div className="App">
