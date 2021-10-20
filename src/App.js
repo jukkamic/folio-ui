@@ -75,12 +75,14 @@ function App() {
   const [mediaItems, setMediaItems] = useState([(<NewsTick name="1" title="Loading media..." url="#"/> )]);
   const [lolItems, setLolItems] = useState([(<NewsTick name="2" title="Loading the lulz..." url="#"/> )]);
   const [movePriceTicker, setMovePriceTicker] = useState(true);
+  const [total, setTotal] = useState(0);
 
   const SLEEP_TIME = 2000;
   async function setData() {
     fetchWalletData(hideSmall).then( data => {
       setWalletData(data);
       const total = countTotal(data);
+      setTotal(total);
       const [symbols, values] = parseSymbolsValues(data, total, hideSmall);  
       setSymbols(symbols);
       setValues(values);
@@ -123,14 +125,59 @@ function App() {
 
   const handlePriceBoxToggle = () => setMovePriceTicker(!movePriceTicker);
   const handleHideSmall = () => setHideSmall(!hideSmall);
+  const shareValue = (share) => {
+    const current_share = Math.round(((total * share) + Number.EPSILON) * 100) / 100;
+    return current_share;
+  }
+  const netUSDT = (og, share) => {
+    const current_value = shareValue(share);
+    const net = Math.round(((current_value - og) + Number.EPSILON) * 100) / 100;
+
+    if (net >= 0) {
+      return <span className='up'>+{Intl.NumberFormat('en-US').format(net)} USDT</span>
+    } else {
+      return <span className='down'>{Intl.NumberFormat('en-US').format(net)} USDT</span>
+    }
+  }
+  const netPercentage = (og, share) => {
+    const current_value = shareValue(share);
+    const net = Math.round(((current_value / og - 1) + Number.EPSILON) * 10000) / 100;
+    if (net >= 0) {
+      return <span className='up'>+{net} %</span>
+    } else {
+      return <span className='down'>{net} %</span>
+    }
+  }
 
   return (
     <div className="App">
       <Container fluid>
-        <Row>
-          <Col md={{"span": 8, "offset": 2}} style={{"borderRadius": "6px", "border": "1px solid black"}}>
+        <Row style={{"marginBottom": 0}}>
+          <Col md={{"span": 2, "offset": 1}} style={{"paddingRight": "8px", "textAlign": "right", "borderRadius": "6px", "border": "2px solid black"}}>
+            <Row style={{"marginTop": 0, "marginBottom": 0}}>
+              <Col style={{"borderBottom": "2px solid black", "borderRadius": "6px"}}><b>Companyman {Intl.NumberFormat('en-US').format(shareValue(0.7649))}</b> USDT
+                <br />{netUSDT(1764.34, 0.7649)} 
+                <br />{netPercentage(1764.34, 0.7649)}
+              </Col>
+            </Row>
+            <Row style={{"marginTop": 0, "marginBottom": 0}}>
+              <Col style={{"borderBottom": "2px solid black", "borderRadius": "6px"}}><b>Zippo {shareValue(0.2351)}</b> USDT
+                <br />{netUSDT(542.39, 0.2351)} 
+                <br />{netPercentage(542.39, 0.2351)}
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+              </Col>
+            </Row>
+          </Col>
+          <Col md={{"span": 8}} style={{"borderRadius": "6px", "border": "1px solid black"}}>
             <Row style={{"marginBottom": "4px", "paddingTop": "0px"}}>
-              <Col style={{"paddingTop": "4px", "textAlign": "middle", "borderRadius": "6px", "border": "2px solid black"}}>
+              <Col style={{"paddingTop": "4px", "textAlign": "middle", "border": "2px solid black"}}>
                 <h2>{title}</h2>
               </Col>
             </Row>
@@ -147,29 +194,7 @@ function App() {
           </Col>
         </Row>
         <Row>
-          {/* <Col md={{"span": 1, "offset": 1}} style={{"paddingRight": "8px", "textAlign": "right", "borderRadius": "6px", "border": "2px solid black", "borderRight": "white"}}>
-            <Row>
-              <Col>
-              <br />
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                NEWS
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                MEDIA
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                LULZ
-              </Col>
-            </Row>
-          </Col> */}
-          <Col md={{"span": 8, "offset": 2}} style={{"borderRadius": "6px", "border": "2px solid black", "padding": 0}}>
+          <Col md={{"span": 10, "offset": 1}} style={{"borderRadius": "6px", "border": "2px solid black", "padding": 0}}>
             <Row>
               <Col>
                 <span onMouseEnter={handlePriceBoxToggle} onMouseLeave={handlePriceBoxToggle}>
