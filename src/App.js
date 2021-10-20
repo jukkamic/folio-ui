@@ -149,23 +149,23 @@ function App() {
     }
   }
 
+  const PersonalRow = (props) => {
+    return (
+    <Row style={{"marginTop": 0, "marginBottom": 0}}>
+      <Col style={{"borderBottom": "2px solid black", "borderRadius": "6px"}}><b>{props.name}</b> {netPercentage(props.og, props.share)}
+        <br /><b>{Intl.NumberFormat('en-US').format(shareValue(props.share))}</b> USDT
+        <br />{netUSDT(props.og, props.share)} 
+      </Col>
+    </Row>);
+  }
+
   return (
     <div className="App">
       <Container fluid>
         <Row style={{"marginBottom": 0}}>
           <Col md={{"span": 2, "offset": 1}} style={{"paddingRight": "8px", "textAlign": "right", "borderRadius": "6px", "border": "2px solid black"}}>
-            <Row style={{"marginTop": 0, "marginBottom": 0}}>
-              <Col style={{"borderBottom": "2px solid black", "borderRadius": "6px"}}><b>Companyman {Intl.NumberFormat('en-US').format(shareValue(0.7649))}</b> USDT
-                <br />{netUSDT(1764.34, 0.7649)} 
-                <br />{netPercentage(1764.34, 0.7649)}
-              </Col>
-            </Row>
-            <Row style={{"marginTop": 0, "marginBottom": 0}}>
-              <Col style={{"borderBottom": "2px solid black", "borderRadius": "6px"}}><b>Zippo {shareValue(0.2351)}</b> USDT
-                <br />{netUSDT(542.39, 0.2351)} 
-                <br />{netPercentage(542.39, 0.2351)}
-              </Col>
-            </Row>
+            <PersonalRow name="Companyman" og="1764.67" share="0.7649" />
+            <PersonalRow name="Zippo" og="542.39" share="0.2351" />
             <Row>
               <Col>
               </Col>
