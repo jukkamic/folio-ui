@@ -164,8 +164,9 @@ function App() {
       <Container fluid>
         <Row style={{"marginBottom": 0}}>
           <Col md={{"span": 2, "offset": 1}} style={{"paddingRight": "8px", "textAlign": "right", "borderRadius": "6px", "border": "2px solid black"}}>
-            <PersonalRow name="Companyman" og="1764.67" share="0.7649" />
-            <PersonalRow name="Zippo" og="542.39" share="0.2351" />
+            <PersonalRow name="Companyman" og="1764.67" share="0.75047914435" />
+            <PersonalRow name="Zippo" og="542.39" share="0.23066759947" />
+            <PersonalRow name="VV" og="46.14" share="0.01885325627" />
             <Row>
               <Col>
               </Col>
