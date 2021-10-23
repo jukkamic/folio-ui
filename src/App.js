@@ -4,6 +4,7 @@ import {useEffect, useState} from 'react';
 import useInterval from 'react-useinterval';
 import Scroller from './components/Scroller';
 import MyDoughnut from './components/MyDoughnut';
+import MyPortfolioRow from './components/MyPortfolioRow';
 import NewsTickerRow from './components/NewsTickerRow';
 import axios from "axios";
 import { Container, Col, Row, Button } from 'react-bootstrap';
@@ -125,48 +126,15 @@ function App() {
 
   const handlePriceBoxToggle = () => setMovePriceTicker(!movePriceTicker);
   const handleHideSmall = () => setHideSmall(!hideSmall);
-  const shareValue = (share) => {
-    const current_share = Math.round(((total * share) + Number.EPSILON) * 100) / 100;
-    return current_share;
-  }
-  const netUSDT = (og, share) => {
-    const current_value = shareValue(share);
-    const net = Math.round(((current_value - og) + Number.EPSILON) * 100) / 100;
-
-    if (net >= 0) {
-      return <span className='up'>+{Intl.NumberFormat('en-US').format(net)} USDT</span>
-    } else {
-      return <span className='down'>{Intl.NumberFormat('en-US').format(net)} USDT</span>
-    }
-  }
-  const netPercentage = (og, share) => {
-    const current_value = shareValue(share);
-    const net = Math.round(((current_value / og - 1) + Number.EPSILON) * 10000) / 100;
-    if (net >= 0) {
-      return <span className='up'>+{net} %</span>
-    } else {
-      return <span className='down'>{net} %</span>
-    }
-  }
-
-  const PersonalRow = (props) => {
-    return (
-    <Row style={{"marginTop": 0, "marginBottom": 0}}>
-      <Col style={{"borderBottom": "2px solid black", "borderRadius": "6px"}}><b>{props.name}</b> {netPercentage(props.og, props.share)}
-        <br /><b>{Intl.NumberFormat('en-US').format(shareValue(props.share))}</b> USDT
-        <br />{netUSDT(props.og, props.share)} 
-      </Col>
-    </Row>);
-  }
 
   return (
     <div className="App">
       <Container fluid>
         <Row style={{"marginBottom": 0}}>
           <Col md={{"span": 2, "offset": 1}} style={{"paddingRight": "8px", "textAlign": "right", "borderRadius": "6px", "border": "2px solid black"}}>
-            <PersonalRow name="Companyman" og="1764.67" share="0.75047914435" />
-            <PersonalRow name="Zippo" og="542.39" share="0.23066759947" />
-            <PersonalRow name="VV" og="46.14" share="0.01885325627" />
+            <MyPortfolioRow name="Companyman" og="1764.67" share="0.75047914435" total={total} />
+            <MyPortfolioRow name="Zippo" og="542.39" share="0.23066759947" total={total} />
+            <MyPortfolioRow name="VV" og="46.14" share="0.01885325627" total={total} />
             <Row>
               <Col>
               </Col>
