@@ -7,7 +7,6 @@ const shareValue = (share, total) => {
 
 const netUSDT = (og, share, total) => {
   const current_value = shareValue(share, total);
-  console.log("current value " + current_value);
   const net = Math.round(((current_value - og) + Number.EPSILON) * 100) / 100;
 
   if (net >= 0) {
@@ -19,9 +18,7 @@ const netUSDT = (og, share, total) => {
 
 const netPercentage = (og, share, total) => {
   const current_value = shareValue(share, total);
-  console.log("current value " + current_value);
   const net = Math.round(((current_value / og - 1) + Number.EPSILON) * 10000) / 100;
-  console.log("net percentage " + net);
   if (net >= 0) {
       return <span className='up'>+{net} %</span>
   } else {

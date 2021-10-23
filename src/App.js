@@ -8,6 +8,7 @@ import MyPortfolioRow from './components/MyPortfolioRow';
 import NewsTickerRow from './components/NewsTickerRow';
 import axios from "axios";
 import { Container, Col, Row, Button } from 'react-bootstrap';
+import DepositModalRow from './components/DepositModal';
 
 const WALLET_URL = process.env.REACT_APP_WALLET_URL;
 const NEWS_URL = process.env.REACT_APP_NEWS_URL;
@@ -135,10 +136,7 @@ function App() {
             <MyPortfolioRow name="Companyman" og="1764.67" share="0.75047914435" total={total} />
             <MyPortfolioRow name="Zippo" og="542.39" share="0.23066759947" total={total} />
             <MyPortfolioRow name="VV" og="46.14" share="0.01885325627" total={total} />
-            <Row>
-              <Col>
-              </Col>
-            </Row>
+            <DepositModalRow />
             <Row>
               <Col>
               </Col>
