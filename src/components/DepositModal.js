@@ -33,30 +33,25 @@ function getPriceFromWalletData(coin, data) {
 function DepositModalRow(props) {
     const [show, setShow] = useState(false);
     const [addr, setAddr] = useState("none");
-    const [share, setShare] = useState(0);
-    const [coin, setCoin] = useState("usdt");
-    const [priceInCoin, setPriceInCoin] = useState(0);
+    const [coin, setCoin] = useState("USDT");
     const [amount, setAmount] = useState(0);
-    const [walletData, setWalletData] = useState();
 
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+        setShow(false);
+        setAmount(0);
+        setCoin("USDT");
+    }
+
     const handleShow = () => setShow(true);
 
     const handleAmount = (e) => {
         const amount = e.target.value;
-        const totalPlusAmount = parseFloat(props.total) + parseFloat(amount);
-        const share = amount / totalPlusAmount;
-        setShare(displayNumber(round(share*100)));
-
-        const price = parseFloat( getPriceFromWalletData(coin, props.walletData) );
-        const conv = parseFloat( amount ) / price;
-        setPriceInCoin(conv);
-
         setAmount(amount);
     };
 
     const handleSelectCrypto = (e) => {
         setCoin(e.target.value.toUpperCase());
+        
         setAddr("Fetching address...");
         fetchAddr(coin).then( res => {
             setAddr(res.data);
@@ -85,7 +80,7 @@ function DepositModalRow(props) {
                 </Button>
                 <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Deposit crypto</Modal.Title>
+                    <Modal.Title>Buy equity in portfolio</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Row>
@@ -129,19 +124,37 @@ function DepositModalRow(props) {
                             </FloatingLabel>
                         </Col>
                         <Col>
-                            Share: {share} %
+                            Share: {displayNumber(round(calculateShare() * 100))} %
                             <br />
-                            {priceInCoin} {coin}
+                            {calculatePriceInCoin()} {coin}
                         </Col>
                     </Row>
 
                 </Modal.Body>
                 <Modal.Footer>
+                    <Row>
+                        <Col>
+                            <b>NOTE</b>
+                            <br />Actual share is subject to price changes. The final amount is determined at the moment of successful deposit transaction.
+                        </Col>
+                    </Row>
                 </Modal.Footer>
                 </Modal>
             </Col>
         </Row>
     );
+
+    function calculateShare() {
+        const totalPlusAmount = parseFloat(props.total) + parseFloat(amount);
+        const share = amount / totalPlusAmount;
+        return share;
+    }
+
+    function calculatePriceInCoin() {
+        const price = parseFloat(getPriceFromWalletData(coin, props.walletData));
+        const conv = parseFloat(amount) / price;
+        return conv;
+    }
   }
   
   export default DepositModalRow;
