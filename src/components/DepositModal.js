@@ -32,7 +32,7 @@ function getPriceFromWalletData(coin, data) {
 
 function DepositModalRow(props) {
     const [show, setShow] = useState(false);
-    const [addr, setAddr] = useState("none");
+    const [addr, setAddr] = useState("Fetching address...");
     const [coin, setCoin] = useState("USDT");
     const [amount, setAmount] = useState(0);
 
@@ -40,6 +40,7 @@ function DepositModalRow(props) {
         setShow(false);
         setAmount(0);
         setCoin("USDT");
+        setAddr("Fetching address...");
     }
 
     const handleShow = () => setShow(true);
@@ -67,6 +68,7 @@ function DepositModalRow(props) {
         // const conv = parseFloat( amount ) / price;
         // setPriceInCoin(conv);
 
+        setCoin("USDT");
         setAddr("Fetching address...");
         fetchAddr("USDT").then( (res) => {
             setAddr(res.data);
