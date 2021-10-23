@@ -118,7 +118,7 @@ function App() {
   useInterval( () => {
     console.log("Reloading...");
     setData();
-  }, 30000);
+  }, 8000);
 
   useEffect( () => {
     setData();
@@ -136,7 +136,7 @@ function App() {
             <MyPortfolioRow name="Companyman" og="1764.67" share="0.75047914435" total={total} />
             <MyPortfolioRow name="Zippo" og="542.39" share="0.23066759947" total={total} />
             <MyPortfolioRow name="VV" og="46.14" share="0.01885325627" total={total} />
-            <DepositModalRow />
+            <DepositModalRow total={total} walletData={walletData}/>
             <Row>
               <Col>
               </Col>
