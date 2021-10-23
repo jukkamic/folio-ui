@@ -67,7 +67,8 @@ function DepositModalRow(props) {
         // const conv = parseFloat( amount ) / price;
         // setPriceInCoin(conv);
 
-        fetchAddr("usdt").then( (res) => {
+        setAddr("Fetching address...");
+        fetchAddr("USDT").then( (res) => {
             setAddr(res.data);
         });
     }, [])
