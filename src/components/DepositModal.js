@@ -52,28 +52,14 @@ function DepositModalRow(props) {
 
     const handleSelectCrypto = (e) => {
         setCoin(e.target.value.toUpperCase());
-        
-        setAddr("Fetching address...");
-        fetchAddr(coin).then( res => {
-            setAddr(res.data);
-        });
     }
 
     useEffect( () => {
-        // const totalPlusAmount = parseFloat(props.total) + parseFloat(amount);
-        // const share = amount / totalPlusAmount;
-        // setShare(displayNumber(round(share*100)));
-
-        // const price = parseFloat( getPriceFromWalletData(coin, props.walletData) );
-        // const conv = parseFloat( amount ) / price;
-        // setPriceInCoin(conv);
-
-        setCoin("USDT");
         setAddr("Fetching address...");
-        fetchAddr("USDT").then( (res) => {
+        fetchAddr(coin).then( res => {
             setAddr(res.data);
-        });
-    }, [])
+        });    
+    }, [coin])
 
     return (
         <Row>
