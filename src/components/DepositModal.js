@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Button, Col, FloatingLabel, Form, Modal, Row } from "react-bootstrap";
+import { Button, Col, FloatingLabel, Form, Image, Modal, Row } from "react-bootstrap";
 import axios from "axios";
 
 const DEPOSIT_ADDR_URL = process.env.REACT_APP_WALLET_URL + "deposits/addr/";
+const USD = "USDT";
   
 async function fetchAddr(coin) {
     const res = axios.get(DEPOSIT_ADDR_URL + coin);
@@ -19,7 +20,7 @@ function displayNumber(num) {
 }
 
 function getPriceFromWalletData(coin, data) {
-    if (coin === "USDT") {
+    if (coin === USD) {
         return 1;
     }
     // eslint-disable-next-line
@@ -33,22 +34,39 @@ function getPriceFromWalletData(coin, data) {
 function DepositModalRow(props) {
     const [show, setShow] = useState(false);
     const [addr, setAddr] = useState("Fetching address...");
-    const [coin, setCoin] = useState("USDT");
-    const [amount, setAmount] = useState("0");
+    const [coin, setCoin] = useState(USD);
+    const [amountInUsdt, setAmountInUsdt] = useState("0");
+    const [inputUsdt, setInputUsdt] = useState(false);
     const [amountInCoin, setAmountInCoin] = useState(0);
+    const [copiedToClipboard, setCopiedToClipboard] = useState(false);
 
     const handleClose = () => {
         setShow(false);
-        setAmount(0);
-        setCoin("USDT");
+        setAmountInUsdt(0);
+        setCoin(USD);
+        setCopiedToClipboard(false);
         setAddr("Fetching address...");
     }
 
-    const handleShow = () => setShow(true);
+    const handleShow = () => {
+        setAmountInUsdt(0);
+        setAmountInCoin(0);
+        setInputUsdt(false);
+        setCopiedToClipboard(false);
+        setCoin(USD);
+        setAddr("Fetching address...");
+        setShow(true);
+    }
 
     const handleAmount = (e) => {
         const amount = e.target.value;
-        setAmount(amount);
+        if (inputUsdt) {
+            setAmountInUsdt(amount);
+            setAmountInCoin(calculatePriceInCoin(amount));
+        } else {
+            setAmountInCoin(amount);
+            setAmountInUsdt(calculatePriceInUSDT(amount));
+        }
     };
 
     const handleAmountInCoin = (e) => {
@@ -57,10 +75,37 @@ function DepositModalRow(props) {
     };
 
     const handleSelectCrypto = (e) => {
+        setAmountInUsdt(0);
+        setAmountInCoin(0);
+        setInputUsdt(false);
+        setCopiedToClipboard(false);
         setCoin(e.target.value.toUpperCase());
     }
 
+    const handleSwitchInput = () => {
+        navigator.clipboard.writeText("");
+        setCopiedToClipboard(false);
+        if (!inputUsdt) {
+            setAmountInUsdt(amountInUsdt);
+            setAmountInCoin(calculatePriceInCoin(amountInUsdt));
+        } else {
+            setAmountInCoin(amountInCoin);
+            setAmountInUsdt(calculatePriceInUSDT(amountInCoin));
+        }
+        setInputUsdt(!inputUsdt);
+    }
+
+    const handleFocus = (e) => {
+        const inputNode = e.target;
+        inputNode.setSelectionRange(0, inputNode.value.length);
+    }
+
     useEffect( () => {
+        setAmountInUsdt(0);
+        setAmountInCoin(0);
+        setInputUsdt(false);
+        setCopiedToClipboard(false);
+        navigator.clipboard.writeText("");
         setAddr("Fetching address...");
         fetchAddr(coin).then( res => {
             setAddr(res.data);
@@ -82,7 +127,7 @@ function DepositModalRow(props) {
                         <Col>
                             <FloatingLabel controlId="floatingSelect" label="Choose crypto" className="mb-3">
                                 <Form.Select aria-label="Crypto deposit options" onChange={handleSelectCrypto}>
-                                    <option value="usdt">USDT</option>
+                                    <option value={USD}>{USD}</option>
                                     <option value="btc">BTC</option>
                                     <option value="eth">ETH</option>
                                 </Form.Select>
@@ -93,19 +138,24 @@ function DepositModalRow(props) {
                         <Col>
                             <FloatingLabel
                                 controlId="floatingInput"
-                                label="Amount in USDT"
+                                label={inputLabel(inputUsdt)}
                                 className="mb-3">
-                                <Form.Control onChange={handleAmount} type="text" placeholder="0" value={amount}/>
+                                <Form.Control onFocus={handleFocus} onChange={handleAmount} type="text" placeholder="0" value={amountInCoinOrUsdt(inputUsdt)}/>
                             </FloatingLabel>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col style={{"verticalAlign": "middle", "alignContent":"center", "textAlign": "center"}}>
+                        <Image onClick={handleSwitchInput} className="mb-3" src="swap2.svg" />
                         </Col>
                     </Row>
                     <Row>
                         <Col>
                             <FloatingLabel
                                 controlId="floatingInput"
-                                label={"Amount in " + coin}
+                                label={inputLabel(!inputUsdt)}
                                 className="mb-3">
-                                <Form.Control type="text" placeholder="0.00" readOnly value={calculatePriceInCoin()}/>
+                                <Form.Control type="text" placeholder="0.00" readOnly value={calculatePrice(inputUsdt, amountInCoinOrUsdt(inputUsdt))}/>
                             </FloatingLabel>
                         </Col>
                     </Row>
@@ -133,8 +183,17 @@ function DepositModalRow(props) {
                                 controlId="floatingInput"
                                 label="Deposit address"
                                 className="mb-3">
-                                    <Form.Control type="text" placeholder="0.00" readOnly value={addr["address"]}/>
+                                    <Form.Control onClick={handleCopy} type="text" placeholder="0.00" readOnly
+                                    value={addr["address"]}/>
                             </FloatingLabel>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col style={{"paddingLeft": "16px"}}>
+                            {(copiedToClipboard ? "Copied to clipboard!" : "Click address to copy.")}
+                        </Col>
+                        <Col style={{"paddingLeft": "16px"}}>
+                            <a style={{"color": "black"}} target="_blank" rel="noreferrer" href={addr["url"]}>View in blockchain</a>                            
                         </Col>
                     </Row>
                 </Modal.Body>
@@ -151,18 +210,36 @@ function DepositModalRow(props) {
         </Row>
     );
 
+    function handleCopy(e) {
+        navigator.clipboard.writeText(e.target.value);
+//        e.target.focus();
+        setCopiedToClipboard(true);
+    }
+
+    function inputLabel(yes) {
+        const prefix = "Amount in ";
+        return prefix + (yes ? USD : coin)
+    }
+
+    function amountInCoinOrUsdt(useUsdt) {
+        if( useUsdt ) {
+            return amountInUsdt;
+        } else {
+            return amountInCoin;
+        }
+    }
     function addressLink() {
         return <a href={addr["url"]} target="_blank" rel="noreferrer">{addr["address"]}</a>
     }
 
     function calculateShare() {
-        const totalPlusAmount = parseFloat(props.total) + parseFloat(amount);
-        const share = amount / totalPlusAmount;
+        const totalPlusAmount = parseFloat(props.total) + parseFloat(amountInUsdt);
+        const share = amountInUsdt / totalPlusAmount;
         return share;
     }
 
-    function calculatePriceInCoin() {
-        if (!amount) {
+    function calculatePriceInCoin(amount) {
+        if (!amountInUsdt) {
             return 0;
         }
         const price = parseFloat(getPriceFromWalletData(coin, props.walletData));
@@ -170,10 +247,18 @@ function DepositModalRow(props) {
         return conv;
     }
 
-    function calculatePriceInUSDT() {
+    function calculatePriceInUSDT(amount) {
         const price = parseFloat(getPriceFromWalletData(coin, props.walletData));
         const conv = parseFloat(amount) * price;
         return conv;
+    }
+
+    function calculatePrice(useUsdt, amount) {
+        if (useUsdt) {
+            return calculatePriceInCoin(amount);
+        } else {
+            return calculatePriceInUSDT(amount);
+        }
     }
 
   }
