@@ -118,7 +118,7 @@ function App() {
   useInterval( () => {
     console.log("Reloading...");
     setData();
-  }, 8000);
+  }, 12000);
 
   useEffect( () => {
     setData();

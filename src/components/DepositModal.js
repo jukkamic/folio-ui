@@ -45,7 +45,6 @@ function DepositModalRow(props) {
         setAmountInUsdt(0);
         setCoin(USD);
         setCopiedToClipboard(false);
-        setAddr("Fetching address...");
     }
 
     const handleShow = () => {
@@ -55,6 +54,9 @@ function DepositModalRow(props) {
         setCopiedToClipboard(false);
         setCoin(USD);
         setAddr("Fetching address...");
+        fetchAddr(coin).then( res => {
+            setAddr(res.data);
+        });    
         setShow(true);
     }
 
@@ -133,7 +135,7 @@ function DepositModalRow(props) {
                                 controlId="floatingInput"
                                 label={inputLabel(inputUsdt)}
                                 className="mb-3">
-                                <Form.Control onFocus={handleFocus} onChange={handleAmount} type="text" placeholder="0" value={amountInCoinOrUsdt(inputUsdt)}/>
+                                <Form.Control autoComplete="off" onFocus={handleFocus} onChange={handleAmount} type="text" placeholder="0" value={amountInCoinOrUsdt(inputUsdt)}/>
                             </FloatingLabel>
                         </Col>
                     </Row>
