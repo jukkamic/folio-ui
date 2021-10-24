@@ -9,6 +9,11 @@ import NewsTickerRow from './components/NewsTickerRow';
 import axios from "axios";
 import { Container, Col, Row, Button } from 'react-bootstrap';
 import DepositModalRow from './components/DepositModal';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Dashboard from './components/Dashboard/Dashboard';
+import Preferences from './components/Preferences/Preferences';
+import Login from './components/Login/Login';
+import useToken from './useToken';
 
 const WALLET_URL = process.env.REACT_APP_WALLET_URL;
 const NEWS_URL = process.env.REACT_APP_NEWS_URL;
@@ -65,7 +70,10 @@ async function fetchWalletData(hideSmall) {
   return res.data;
 }
 
+
 function App() {
+  const { token, setToken } = useToken();
+  
   // eslint-disable-next-line
   const [loading, setLoading] = useState(true);  
   const [title, setTitle] = useState("Refreshing...");
@@ -128,8 +136,27 @@ function App() {
   const handlePriceBoxToggle = () => setMovePriceTicker(!movePriceTicker);
   const handleHideSmall = () => setHideSmall(!hideSmall);
 
+  function handleLogout() {
+    setToken(null);
+  }
+
+  if(!token) {
+    return <Login setToken={setToken} />
+  }
+
   return (
     <div className="App">
+      { token ? <Button onClick={handleLogout}>Log out</Button> : "" }
+      <BrowserRouter>
+        <Switch>
+          <Route path="/dashboard">
+            <Dashboard />
+          </Route>
+          <Route path="/preferences">
+            <Preferences />
+          </Route>
+        </Switch>
+      </BrowserRouter>
       <Container fluid>
         <Row style={{"marginBottom": 0}}>
           <Col md={{"span": 2, "offset": 1}} style={{"paddingRight": "8px", "textAlign": "right", "borderRadius": "6px", "border": "2px solid black"}}>
