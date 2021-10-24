@@ -69,11 +69,6 @@ function DepositModalRow(props) {
         }
     };
 
-    const handleAmountInCoin = (e) => {
-        const amount = e.target.value;
-        setAmountInCoin(amount);
-    };
-
     const handleSelectCrypto = (e) => {
         setAmountInUsdt(0);
         setAmountInCoin(0);
@@ -83,8 +78,6 @@ function DepositModalRow(props) {
     }
 
     const handleSwitchInput = () => {
-        navigator.clipboard.writeText("");
-        setCopiedToClipboard(false);
         if (!inputUsdt) {
             setAmountInUsdt(amountInUsdt);
             setAmountInCoin(calculatePriceInCoin(amountInUsdt));
@@ -104,8 +97,8 @@ function DepositModalRow(props) {
         setAmountInUsdt(0);
         setAmountInCoin(0);
         setInputUsdt(false);
+        copyToClipboard("");
         setCopiedToClipboard(false);
-        navigator.clipboard.writeText("");
         setAddr("Fetching address...");
         fetchAddr(coin).then( res => {
             setAddr(res.data);
@@ -210,9 +203,27 @@ function DepositModalRow(props) {
         </Row>
     );
 
+    function copyToClipboard(text) {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(text);
+          } else {
+            const tmp = document.createElement('TEXTAREA');
+            const focus = document.activeElement;
+        
+            tmp.value = text;
+        
+            document.body.appendChild(tmp);
+            tmp.select();
+            document.execCommand('copy');
+            document.body.removeChild(tmp);
+            focus.focus();
+          }        
+    }
+
     function handleCopy(e) {
-        navigator.clipboard.writeText(e.target.value);
+//        navigator.clipboard.writeText(e.target.value);
 //        e.target.focus();
+        copyToClipboard(e.target.value);
         setCopiedToClipboard(true);
     }
 
@@ -228,9 +239,9 @@ function DepositModalRow(props) {
             return amountInCoin;
         }
     }
-    function addressLink() {
-        return <a href={addr["url"]} target="_blank" rel="noreferrer">{addr["address"]}</a>
-    }
+    // function addressLink() {
+    //     return <a href={addr["url"]} target="_blank" rel="noreferrer">{addr["address"]}</a>
+    // }
 
     function calculateShare() {
         const totalPlusAmount = parseFloat(props.total) + parseFloat(amountInUsdt);
