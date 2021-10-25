@@ -110,8 +110,9 @@ function DepositModalRow(props) {
     return (
         <Row>
             <Col style={{"textAlign": "center", "padding": "8px"}}>
-                <Button style={{"width": "100%"}} variant="primary" onClick={handleShow}> 
-                Buy equity
+                {/*0C63E4 E7F1FF */}
+                <Button style={{"color": "black", "backgroundColor": "#E7F1FF", "width": "100%"}} onClick={handleShow}> 
+                <b>Buy equity</b>
                 </Button>
                 <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
@@ -176,7 +177,7 @@ function DepositModalRow(props) {
                         <Col>
                             <FloatingLabel
                                 controlId="floatingInput"
-                                label="Deposit address"
+                                label={"Deposit address " + coin}
                                 className="mb-3">
                                     <Form.Control onClick={handleCopy} type="text" placeholder="0.00" readOnly
                                     value={addr["address"]}/>

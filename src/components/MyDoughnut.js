@@ -14,6 +14,27 @@ const bgColors = [
     '#0F6988',
     '#003AAD',
   ]
+
+//   const bgColors2 = [
+//       '#EE715D',
+//       '#EED15D',
+//       '#5DEE97',
+//       '#7A5DEE',
+
+//       '#E0EE5D',
+//       '#BB5DEE',
+//       '#EE5D90',
+
+//       '#86EE5D',
+//       '#5DD8EE',
+//       '#EE5D9C',
+//       '#D8EE5D',
+
+//       '#5DADEE',
+//       '#C55DEE',
+//       '#EEA35D',
+//       '#EE955D',
+//   ]
   
   const borderColors = [
     '#000000',

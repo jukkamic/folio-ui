@@ -7,7 +7,7 @@ import MyDoughnut from './components/MyDoughnut';
 import MyPortfolioRow from './components/MyPortfolioRow';
 import NewsTickerRow from './components/NewsTickerRow';
 import axios from "axios";
-import { Container, Col, Row, Button } from 'react-bootstrap';
+import { Container, Col, Row, Button, Accordion } from 'react-bootstrap';
 import DepositModalRow from './components/DepositModal';
 
 const WALLET_URL = process.env.REACT_APP_WALLET_URL;
@@ -60,7 +60,7 @@ async function fetchNews(kind, filter) {
   return res;
 }
   
-async function fetchWalletData(hideSmall) {
+async function fetchWalletData() {
   const res = await axios.get(WALLET_URL);
   return res.data;
 }
@@ -81,7 +81,7 @@ function App() {
 
   const SLEEP_TIME = 2000;
   async function setData() {
-    fetchWalletData(hideSmall).then( data => {
+    fetchWalletData().then( data => {
       setWalletData(data);
       const total = countTotal(data);
       setTotal(total);
@@ -132,7 +132,7 @@ function App() {
     <div className="App">
       <Container fluid>
         <Row style={{"marginBottom": 0}}>
-          <Col md={{"span": 2, "offset": 1}} style={{"paddingRight": "8px", "textAlign": "right", "borderRadius": "6px", "border": "2px solid black"}}>
+          <Col md={{"span": 2, "offset": 1}} style={{"paddingRight": "8px", "textAlign": "right", "borderRadius": "6px", "border": "1px solid black"}}>
             <MyPortfolioRow name="Companyman" og="1764.67" share="0.75047914435" total={total} />
             <MyPortfolioRow name="Zippo" og="542.39" share="0.23066759947" total={total} />
             <MyPortfolioRow name="VV" og="46.14" share="0.01885325627" total={total} />
@@ -143,25 +143,27 @@ function App() {
             </Row>
           </Col>
           <Col md={{"span": 8}} style={{"borderRadius": "6px", "border": "1px solid black"}}>
-            <Row style={{"marginBottom": "4px", "paddingTop": "0px"}}>
-              <Col style={{"paddingTop": "4px", "textAlign": "middle", "border": "2px solid black"}}>
-                <h2>{title}</h2>
-              </Col>
-            </Row>
-            <Row style={{"marginBottom": "0px"}}>
-              <Col style={{"textAlign": "left"}}>
-                <Button style={{"marginLeft": "0px", "borderRadius": "6px", "border": "2px solid black", "padding": "4"}} onClick={handleHideSmall} size="sm" variant="secondary">{hideSmall ? "Show" : "Hide"} small balances</Button>
-              </Col>
-            </Row>
-            <Row style={{"marginTop": "0px", "paddingBottom": "8px"}}>
-              <Col>
-                <MyDoughnut symbols={symbols} values={values}/>
-              </Col>
-            </Row>
+                <Accordion defaultActiveKey="0" flush={true}>
+                  <Accordion.Item eventKey="0">
+                    <Accordion.Header><h4 style={{"color": "black"}}>{title}</h4></Accordion.Header>
+                    <Accordion.Body>
+                      <Row style={{"marginBottom": "0px"}}>
+                        <Col style={{"textAlign": "left"}}>
+                          <Button style={{"marginLeft": "0px", "borderRadius": "6px", "border": "1px solid black", "padding": "4"}} onClick={handleHideSmall} size="sm" variant="secondary">{hideSmall ? "Show" : "Hide"} small balances</Button>
+                        </Col>
+                      </Row>
+                      <Row style={{"marginTop": "0px", "paddingBottom": "8px"}}>
+                        <Col>
+                          <MyDoughnut symbols={symbols} values={values}/>
+                        </Col>
+                      </Row>
+                    </Accordion.Body>
+                  </Accordion.Item>
+                </Accordion>
           </Col>
         </Row>
         <Row>
-          <Col md={{"span": 10, "offset": 1}} style={{"borderRadius": "6px", "border": "2px solid black", "padding": 0}}>
+          <Col md={{"span": 10, "offset": 1}} style={{"borderRadius": "6px", "border": "1px solid black", "padding": 0}}>
             <Row>
               <Col>
                 <span onMouseEnter={handlePriceBoxToggle} onMouseLeave={handlePriceBoxToggle}>
