@@ -35,7 +35,13 @@ function Scroller(props) {
             const rounded = Math.round((price + Number.EPSILON) * 100) / 100;
             const change = entry[1]["change"]; 
             if (asset !== "BUSD" && asset !== "USDT") {
-                const url = "https://www.binance.com/en/trade/" + asset + "_USDT";
+                var url = "";
+                if (asset === "TEL") {
+                    url = "https://coinmarketcap.com/currencies/telcoin/";
+                } else {
+                    url = "https://www.binance.com/en/trade/" + asset + "_USDT";
+
+                }
                 tickerItems.push( (<Tick key={asset} symbol={asset} price={rounded} url={url} change={change}/>) );
             }
         }
