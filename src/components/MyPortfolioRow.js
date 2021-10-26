@@ -1,4 +1,4 @@
-import { Col, Row } from 'react-bootstrap';
+import { Accordion, Card } from 'react-bootstrap';
 
 const shareValue = (share, total) => {
   const current_share = Math.round(((total * share) + Number.EPSILON) * 100) / 100;
@@ -28,12 +28,27 @@ const netPercentage = (og, share, total) => {
 
 const MyPortfolioRow = (props) => {
   return (
-    <Row style={{"marginTop": 0, "marginBottom": 0}}>
-      <Col style={{"borderBottom": "2px solid black", "borderRadius": "6px"}}><b>{props.name}</b> {netPercentage(props.og, props.share, props.total)}
-        <br /><b>{Intl.NumberFormat('en-US').format(shareValue(props.share, props.total))}</b> USDT
-        <br />{netUSDT(props.og, props.share, props.total)} 
-      </Col>
-    </Row>
+    <Accordion defaultActiveKey="0">
+      <Accordion.Item eventKey="0">
+      <Accordion.Header>
+        <span style={{"color": "black"}}><b>{props.name}</b></span>
+      </Accordion.Header>
+      <Accordion.Body>
+      {netPercentage(props.og, props.share, props.total)}<br />
+      {Intl.NumberFormat('en-US').format(shareValue(props.share, props.total))} USDT
+      <br />{netUSDT(props.og, props.share, props.total)}
+      </Accordion.Body>
+      </Accordion.Item>
+    </Accordion>
+
+    // <Card fluid style={{}}>
+    //   <Card.Body>
+    //     <Card.Title style={{"fontSize": "16px"}}>{props.name}</Card.Title>
+    //     <Card.Subtitle>{netPercentage(props.og, props.share, props.total)}</Card.Subtitle>
+    //     <Card.Text>{Intl.NumberFormat('en-US').format(shareValue(props.share, props.total))} USDT
+    //     <br />{netUSDT(props.og, props.share, props.total)}</Card.Text>
+    //   </Card.Body>
+    // </Card>
   );
 }
 

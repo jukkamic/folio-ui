@@ -78,17 +78,13 @@ function App() {
     <div className="App">
       <Container fluid>
         <Row style={{"marginBottom": 0}}>
-          <Col md={{"span": 2, "offset": 1}} style={{"paddingRight": "8px", "textAlign": "right", "borderRadius": "6px", "border": "1px solid black"}}>
+          <Col md={{"span": 2, "offset": 1}} style={{"paddingRight": "8px", "textAlign": "right"}}>
             <MyPortfolioRow name="Companyman" og="1764.67" share="0.75047914435" total={total} />
             <MyPortfolioRow name="Zippo" og="542.39" share="0.23066759947" total={total} />
             <MyPortfolioRow name="VV" og="46.14" share="0.01885325627" total={total} />
             <DepositModalRow total={total} walletData={walletData}/>
-            <Row>
-              <Col>
-              </Col>
-            </Row>
           </Col>
-          <Col md={{"span": 8}} style={{"borderRadius": "6px", "border": "1px solid black"}}>
+          <Col md={{"span": 8}} style={{}}>
                 <Accordion defaultActiveKey="0" flush={true}>
                   <Accordion.Item eventKey="0">
                     <Accordion.Header><h4 style={{"color": "black"}}>{title}</h4></Accordion.Header>
@@ -104,7 +100,7 @@ function App() {
           </Col>
         </Row>
         <Row>
-          <Col md={{"span": 10, "offset": 1}} style={{"borderRadius": "6px", "border": "1px solid black", "padding": 0}}>
+          <Col md={{"span": 10, "offset": 1}} style={{"borderRadius": "6px", "border": "1px dotted gray", "padding": 0}}>
             <NewsTickerRow rowKey="priceRow" speed={9} newsItems={priceItems} />
             <NewsTickerRow rowKey="newsrow" speed={7} newsItems={newsItems} />
             <NewsTickerRow rowKey="mediarow" speed={7}  newsItems={mediaItems} />
