@@ -38,7 +38,7 @@ async function fetchNews(isAuthenticated, token, kind, filter) {
 async function fetchWalletData(isAuthenticated, token) {
   if(isAuthenticated) {
     try {
-      const res = await axios.get("http://localhost:8000/folio/wallet", {headers: {Authorization: "Bearer " + token}});
+      const res = await axios.get(WALLET_URL, {headers: {Authorization: "Bearer " + token}});
       // const res = await axios.request(options);
       return await res?.data;
     } catch (err) {

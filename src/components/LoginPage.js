@@ -1,4 +1,4 @@
-import { Container, Row, Col, Image } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import '../Login.css';
 import LoginButton from "./LoginButton";
 
@@ -8,7 +8,7 @@ function LoginPage() {
     <Container fluid className="main">
         <Row className="mainrow">
             <Col span={12} className="maincol">
-                <img alt="logo" class="logo" src="http://localhost:3000/kotkis25-cr.jpg" />
+                <img alt="logo" className="logo" src="/kotkis25-cr.jpg" />
                 <LoginButton/>
             </Col>
         </Row>
