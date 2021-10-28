@@ -1,4 +1,4 @@
-import { Accordion, Card } from 'react-bootstrap';
+import { Accordion } from 'react-bootstrap';
 
 const shareValue = (share, total) => {
   const current_share = Math.round(((total * share) + Number.EPSILON) * 100) / 100;

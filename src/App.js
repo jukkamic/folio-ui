@@ -12,21 +12,48 @@ import NewsTick from './components/NewsTick';
 import { createPriceTickerItems } from './utils/priceTicker';
 import { createNewsTickItems } from './utils/newsTicker';
 import { countTotal, parseSymbolsValues } from './utils/walletParser';
+import { useAuth0 } from "@auth0/auth0-react";
+import LoginPage from './components/LoginPage';
+import LogoutButton from './components/LogoutButton';
+import LoginButton from './components/LoginButton';
 
 const WALLET_URL = process.env.REACT_APP_WALLET_URL;
 const NEWS_URL = process.env.REACT_APP_NEWS_URL;
 
-async function fetchNews(kind, filter) {
-  const res = await axios.get(NEWS_URL + "cryptopanic/" + kind + "/" + filter);
-  return res;
+async function fetchNews(isAuthenticated, token, kind, filter) {
+  if( isAuthenticated ) {
+    var options = {
+      method: 'GET',
+      url: NEWS_URL + "cryptopanic/" + kind + "/" + filter,
+      headers: {Authorization: 'Bearer ' + token}
+    };
+
+    const res = await axios.request(options);
+    
+    // const res = await axios.get(NEWS_URL + "cryptopanic/" + kind + "/" + filter);
+    return res;
+  }
 }
   
-async function fetchWalletData() {
-  const res = await axios.get(WALLET_URL);
-  return res.data;
+async function fetchWalletData(isAuthenticated, token) {
+  if(isAuthenticated) {
+    try {
+      const res = await axios.get("http://localhost:8000/folio/wallet", {headers: {Authorization: "Bearer " + token}});
+      // const res = await axios.request(options);
+      return await res?.data;
+    } catch (err) {
+      console.log("Error!", err);
+    }
+
+  }
 }
 
 function App() {
+  // eslint-disable-next-line
+  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
+  // eslint-disable-next-line
+  const [userMetadata, setUserMetadata] = useState(null);
+
   const [title, setTitle] = useState("Refreshing...");
   const [walletData, setWalletData] = useState({})
   const [values, setValues] = useState([]);
@@ -38,8 +65,9 @@ function App() {
   const [total, setTotal] = useState(0);
 
   const SLEEP_TIME = 2000;
-  async function setData() {
-    fetchWalletData().then( data => {
+  
+  async function setData(isAuthenticated, token) {
+    fetchWalletData(isAuthenticated, token).then( data => {
       setWalletData(data);
       const total = countTotal(data);
       setTotal(total);
@@ -54,11 +82,11 @@ function App() {
     })
 
     try {
-      setNewsItems(createNewsTickItems(await fetchNews("news", "all")));
+      setNewsItems(createNewsTickItems(await fetchNews(isAuthenticated, token, "news", "all")));
       await new Promise(r => setTimeout(r, SLEEP_TIME));
-      setMediaItems(createNewsTickItems(await fetchNews("media", "all")));
+      setMediaItems(createNewsTickItems(await fetchNews(isAuthenticated, token, "media", "all")));
       await new Promise(r => setTimeout(r, SLEEP_TIME));
-      setLolItems(createNewsTickItems(await fetchNews("all", "lol")));
+      setLolItems(createNewsTickItems(await fetchNews(isAuthenticated, token, "all", "lol")));
     } catch (err) {
       console.log(err);
     }
@@ -67,22 +95,44 @@ function App() {
 
   useInterval( () => {
     console.log("Reloading...");
-    setData();
-  }, 12000);
+    console.log("is authenticated? " + isAuthenticated);
+    if (isAuthenticated) {
+      getAccessTokenSilently({
+        audience: `https://dev-88-mri1m.us.auth0.com/api/v2/`,
+        scope: "read:all",
+      }).then( (token) => {
+        setData(isAuthenticated, token);
+      }).catch( err => {
+        console.log(err);
+      })
+    }
+  }, 18000);
 
   useEffect( () => {
-    setData();
-  }, []);
+    if (isAuthenticated) {
+      getAccessTokenSilently({
+        audience: `https://dev-88-mri1m.us.auth0.com/api/v2/`,
+        scope: "read:all",
+      }).then( (token) => {
+        setData(isAuthenticated, token);
+      })
+    }
+  }, [getAccessTokenSilently, isAuthenticated, user]);
+
+  if (!isAuthenticated) {
+    return <LoginPage />
+  }
 
   return (
     <div className="App">
-      <Container fluid>
+      <Container fluid className="app-main">
         <Row style={{"marginBottom": 0}}>
           <Col md={{"span": 2, "offset": 1}} style={{"paddingRight": "8px", "textAlign": "right"}}>
             <MyPortfolioRow name="Companyman" og="1764.67" share="0.75047914435" total={total} />
             <MyPortfolioRow name="Zippo" og="542.39" share="0.23066759947" total={total} />
             <MyPortfolioRow name="VV" og="46.14" share="0.01885325627" total={total} />
             <DepositModalRow total={total} walletData={walletData}/>
+            {isAuthenticated ? <LogoutButton /> : <LoginButton />} 
           </Col>
           <Col md={{"span": 8}} style={{}}>
                 <Accordion defaultActiveKey="0" flush={true}>

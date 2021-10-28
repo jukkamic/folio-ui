@@ -6,10 +6,10 @@ const Tick = (props) => {
     const up = (change >= 0) ? true : false;
     return (
         <span key={props.symbol}>
-            <span className="dot"></span>
-            <a href={props.url} target="_blank" rel="noreferrer" className="tickers">{props.symbol}  {price}</a> 
+            <span className="dot" style={{"backgroundColor": "white"}}></span>
+            <a href={props.url} target="_blank" rel="noreferrer" className="tickers"><b>{props.symbol}</b>  {price}</a> 
             {(props.change ? 
-                <span className={(up ? "up" : "down")}> {(up ? "+" : "")}{change}%</span> : ""
+                <b><span className={(up ? "up" : "down")}> {(up ? "+" : "")}{change}%</span></b> : ""
             )}
         </span>);
 };
