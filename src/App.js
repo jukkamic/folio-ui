@@ -98,7 +98,8 @@ function App() {
     console.log("is authenticated? " + isAuthenticated);
     if (isAuthenticated) {
       getAccessTokenSilently({
-        audience: `https://dev-88-mri1m.us.auth0.com/api/v2/`,
+//        audience: `https://dev-88-mri1m.us.auth0.com/api/v2/`,
+        audience: "https://folio.kotkis.fi/",
         scope: "read:all",
       }).then( (token) => {
         setData(isAuthenticated, token);
@@ -111,7 +112,8 @@ function App() {
   useEffect( () => {
     if (isAuthenticated) {
       getAccessTokenSilently({
-        audience: `https://dev-88-mri1m.us.auth0.com/api/v2/`,
+//        audience: `https://dev-88-mri1m.us.auth0.com/api/v2/`,
+        audience: "https://folio.kotkis.fi/",
         scope: "read:all",
       }).then( (token) => {
         setData(isAuthenticated, token);
@@ -120,7 +122,7 @@ function App() {
   }, [getAccessTokenSilently, isAuthenticated, user]);
 
   if (!isAuthenticated) {
-    return <LoginPage />
+    return <LoginPage name={user?.name}/>
   }
 
   return (

@@ -13,9 +13,9 @@ ReactDOM.render(
       // ViSWsNBtyRoviyX6Gt32FbkG9VgbtCGF
       redirectUri={window.location.origin}
 //      audience="https://dev-88-mri1m.us.auth0.com/api/v2/"
-      audience="https://dev-88-mri1m.us.auth0.com/api/v2/"
+      audience="https://folio.kotkis.fi/"
       scope="read:all"
-      // useRefreshTokens={true}
+      useRefreshTokens={true}
       >
 
       <App />
