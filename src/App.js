@@ -95,7 +95,6 @@ function App() {
 
   useInterval( () => {
     console.log("Reloading...");
-    console.log("is authenticated? " + isAuthenticated);
     if (isAuthenticated) {
       getAccessTokenSilently({
 //        audience: `https://dev-88-mri1m.us.auth0.com/api/v2/`,
