@@ -55,6 +55,7 @@ function App() {
   // eslint-disable-next-line
   const [userMetadata, setUserMetadata] = useState(null);
 
+  const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState("Refreshing...");
   const [walletData, setWalletData] = useState({})
   const [values, setValues] = useState([]);
@@ -94,6 +95,12 @@ function App() {
 
   }
 
+  useEffect( () => {
+    if (Object.keys(walletData).length > 0) {
+      setLoading(false);
+    }
+  }, [walletData]);
+  
   useInterval( () => {
     console.log("Reloading...");
     if (isAuthenticated) {
@@ -125,16 +132,14 @@ function App() {
     return <LoginPage />
   }
 
-  console.log("user: ", user);
-
   return (
     <div className="App">
       <Container fluid className="app-main">
         <Row style={{"marginBottom": 0}}>
           <Col md={{"span": 2, "offset": 1}} style={{"paddingRight": "8px", "textAlign": "right"}}>
-            <MyPortfolioRow name="Companyman" og="1764.67" share="0.75047914435" total={total} />
-            <MyPortfolioRow name="Zippo" og="542.39" share="0.23066759947" total={total} />
-            <MyPortfolioRow name="VV" og="46.14" share="0.01885325627" total={total} />
+            <MyPortfolioRow name="Companyman" og={loading ? "0" : "1764.67"} share="0.75047914435" total={total} />
+            <MyPortfolioRow name="Zippo" og={loading ? "0" : "542.39"} share="0.23066759947" total={total} />
+            <MyPortfolioRow name="VV" og={loading ? "0" : "46.14"} share="0.01885325627" total={total} />
             <DepositModalRow total={total} walletData={walletData}/>
             {isAuthenticated ? <LogoutButton /> : <LoginButton />} 
             {user?.email === "jukkamic@gmail.com" ? <Blog /> : ""}
