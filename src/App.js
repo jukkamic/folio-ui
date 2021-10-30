@@ -10,32 +10,16 @@ import NewsTickerRow from './components/NewsTickerRow';
 import DepositModalRow from './components/DepositModal';
 import NewsTick from './components/NewsTick';
 import { createPriceTickerItems } from './utils/priceTicker';
-import { createNewsTickItems } from './utils/newsTicker';
 import { countTotal, parseSymbolsValues } from './utils/walletParser';
 import { useAuth0 } from "@auth0/auth0-react";
 import LoginPage from './components/LoginPage';
 import LogoutButton from './components/LogoutButton';
 import LoginButton from './components/LoginButton';
 import Blog from './components/Blog';
+import NewsComponent from './components/news/NewsComponent';
 
 const WALLET_URL = process.env.REACT_APP_WALLET_URL;
-const NEWS_URL = process.env.REACT_APP_NEWS_URL;
 
-async function fetchNews(isAuthenticated, token, kind, filter) {
-  if( isAuthenticated ) {
-    var options = {
-      method: 'GET',
-      url: NEWS_URL + "cryptopanic/" + kind + "/" + filter,
-      headers: {Authorization: 'Bearer ' + token}
-    };
-
-    const res = await axios.request(options);
-    
-    // const res = await axios.get(NEWS_URL + "cryptopanic/" + kind + "/" + filter);
-    return res;
-  }
-}
-  
 async function fetchWalletData(isAuthenticated, token) {
   if(isAuthenticated) {
     try {
@@ -61,12 +45,7 @@ function App() {
   const [values, setValues] = useState([]);
   const [symbols, setSymbols] = useState([]);
   const [priceItems, setPriceItems] = useState([(<NewsTick name="0" title="Prices coming in..." url="#"/> )]);
-  const [newsItems, setNewsItems] = useState([(<NewsTick name="1" title="Loading news..." url="#"/> )]);
-  const [mediaItems, setMediaItems] = useState([(<NewsTick name="2" title="Loading media..." url="#"/> )]);
-  const [lolItems, setLolItems] = useState([(<NewsTick name="3" title="Loading the lulz..." url="#"/> )]);
   const [total, setTotal] = useState(0);
-
-  const SLEEP_TIME = 2000;
   
   async function setData(isAuthenticated, token) {
     fetchWalletData(isAuthenticated, token).then( data => {
@@ -82,17 +61,6 @@ function App() {
     }).catch(err => {
       console.log(err);
     })
-
-    try {
-      setNewsItems(createNewsTickItems(await fetchNews(isAuthenticated, token, "news", "all")));
-      await new Promise(r => setTimeout(r, SLEEP_TIME));
-      setMediaItems(createNewsTickItems(await fetchNews(isAuthenticated, token, "media", "all")));
-      await new Promise(r => setTimeout(r, SLEEP_TIME));
-      setLolItems(createNewsTickItems(await fetchNews(isAuthenticated, token, "all", "lol")));
-    } catch (err) {
-      console.log(err);
-    }
-
   }
 
   useEffect( () => {
@@ -162,9 +130,7 @@ function App() {
         <Row>
           <Col md={{"span": 10, "offset": 1}} style={{"borderRadius": "6px", "border": "1px dotted gray", "padding": 0}}>
             <NewsTickerRow rowKey="priceRow" speed={9} newsItems={priceItems} />
-            <NewsTickerRow rowKey="newsrow" speed={7} newsItems={newsItems} />
-            <NewsTickerRow rowKey="mediarow" speed={7}  newsItems={mediaItems} />
-            <NewsTickerRow rowKey="lolrow" speed={7}  newsItems={lolItems} />
+            <NewsComponent />
           </Col>
         </Row>
       </Container>

@@ -9,9 +9,6 @@ function BlogTick() {
     // const { getAccessTokenSilently } = useAuth0();
     const newsTickRef = useRef(null);
 
-    console.log("NewsTicker ",NewsTicker);
-    console.log("Directions, ", Directions);
-
     return(
         <div id="nt-example1-container">
             <i className="fa fa-arrow-up" 
