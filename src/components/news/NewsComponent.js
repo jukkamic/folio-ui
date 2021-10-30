@@ -11,8 +11,7 @@ const SLEEP_TIME = 2000;
 async function fetchNews(kind, filter) {
     var options = {
         method: 'GET',
-        url: NEWS_URL + "cryptopanic/" + kind + "/" + filter,
-        // headers: {Authorization: 'Bearer ' + token}
+        url: NEWS_URL + "cryptopanic/" + kind + "/" + filter
     };
     const res = await axios.request(options);    
     return res;
