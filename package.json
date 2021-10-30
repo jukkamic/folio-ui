@@ -43,5 +43,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "react-advanced-news-ticker": "git+https://github.com/ahmetcanaydemir/react-advanced-news-ticker.git"
   }
 }

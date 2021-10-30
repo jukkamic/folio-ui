@@ -17,7 +17,6 @@ import LoginPage from './components/LoginPage';
 import LogoutButton from './components/LogoutButton';
 import LoginButton from './components/LoginButton';
 import Blog from './components/Blog';
-import BlogFeed from './components/BlogFeed';
 
 const WALLET_URL = process.env.REACT_APP_WALLET_URL;
 const NEWS_URL = process.env.REACT_APP_NEWS_URL;
@@ -108,7 +107,7 @@ function App() {
         console.log(err);
       })
     }
-  }, 78000);
+  }, 18000);
 
   useEffect( () => {
     if (isAuthenticated) {
@@ -125,6 +124,8 @@ function App() {
   if (!isAuthenticated) {
     return <LoginPage />
   }
+
+  console.log("user: ", user);
 
   return (
     <div className="App">
@@ -151,11 +152,6 @@ function App() {
                     </Accordion.Body>
                   </Accordion.Item>
                 </Accordion>
-          </Col>
-        </Row>
-        <Row>
-          <Col md={{"span": 10, "offset": 1}} style={{"borderRadius": "6px", "border": "1px dotted gray", "padding": 0}}>
-            <BlogFeed />
           </Col>
         </Row>
         <Row>
