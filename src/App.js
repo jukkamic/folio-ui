@@ -16,6 +16,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 import LoginPage from './components/LoginPage';
 import LogoutButton from './components/LogoutButton';
 import LoginButton from './components/LoginButton';
+import Blog from './components/Blog';
+import BlogFeed from './components/BlogFeed';
 
 const WALLET_URL = process.env.REACT_APP_WALLET_URL;
 const NEWS_URL = process.env.REACT_APP_NEWS_URL;
@@ -106,7 +108,7 @@ function App() {
         console.log(err);
       })
     }
-  }, 18000);
+  }, 78000);
 
   useEffect( () => {
     if (isAuthenticated) {
@@ -121,7 +123,7 @@ function App() {
   }, [getAccessTokenSilently, isAuthenticated, user]);
 
   if (!isAuthenticated) {
-    return <LoginPage name={user?.name}/>
+    return <LoginPage />
   }
 
   return (
@@ -134,6 +136,7 @@ function App() {
             <MyPortfolioRow name="VV" og="46.14" share="0.01885325627" total={total} />
             <DepositModalRow total={total} walletData={walletData}/>
             {isAuthenticated ? <LogoutButton /> : <LoginButton />} 
+            {user?.email === "jukkamic@gmail.com" ? <Blog /> : ""}
           </Col>
           <Col md={{"span": 8}} style={{}}>
                 <Accordion defaultActiveKey="0" flush={true}>
@@ -148,6 +151,11 @@ function App() {
                     </Accordion.Body>
                   </Accordion.Item>
                 </Accordion>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <BlogFeed />
           </Col>
         </Row>
         <Row>

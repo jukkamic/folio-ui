@@ -2,7 +2,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import '../Login.css';
 import LoginButton from "./LoginButton";
 
-function LoginPage(props) {
+function LoginPage() {
     return(
 
     <Container fluid className="main">
