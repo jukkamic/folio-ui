@@ -154,7 +154,7 @@ function App() {
           </Col>
         </Row>
         <Row>
-          <Col>
+          <Col md={{"span": 10, "offset": 1}} style={{"borderRadius": "6px", "border": "1px dotted gray", "padding": 0}}>
             <BlogFeed />
           </Col>
         </Row>

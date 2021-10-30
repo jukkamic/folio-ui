@@ -22,14 +22,6 @@ function Blog(props) {
         e.preventDefault();
         const myjson = {"title": title, "content": content, "author": "1"}
         blogApi.createPost(getAccessTokenSilently, myjson);
-        // const token = await getAccessTokenSilently();
-        // var options = {
-        //     method: 'POST',
-        //     url: "http://localhost:8000/folio/blog/posts/",
-        //     headers: {Authorization: 'Bearer ' + token, 'Content-Type': 'application/json'},
-        //     data: myjson
-        // }
-        // axios.request(options);        
         setShow(false);
     }
 

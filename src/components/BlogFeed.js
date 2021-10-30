@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import { Col, Row } from 'react-bootstrap';
 import {blogApi} from "../services/blogApi";
-
 import Ticker from 'react-ticker';
 
 
@@ -14,21 +14,32 @@ import Ticker from 'react-ticker';
 function BlogFeed() {
     const [posts, setPosts] = useState([{"title": "Waiting for announcements..."}]);
     const { getAccessTokenSilently } = useAuth0();
- 
+    const [move, setMove] = useState(true);
+
+    const moveToggleHandler = () => setMove(!move);
+
     useEffect(() => {
         async function fetchData() {
             const results = await blogApi.listPosts(getAccessTokenSilently);
             setPosts(JSON.parse(results.data));
         }
         fetchData();
-    }, []); // Or [] if effect doesn't need props or state
+    }, [getAccessTokenSilently]); // Or [] if effect doesn't need props or state
 
     return (
-        <Ticker key="postkey" speed={7} move={true}>
-            {({index}) => (
-                posts[index % posts.length]["title"]
-            )}
-        </Ticker>
+        <Row>
+            <Col>
+                <div style={{"whiteSpace": "nowrap"}}>
+                    <div onMouseEnter={moveToggleHandler} onMouseLeave={moveToggleHandler}>
+                    <Ticker key="postkey" speed={7} move={move}>
+                        {({index}) => (
+                            posts[index % posts.length]["title"]
+                        )}
+                    </Ticker>
+                    </div>
+                </div>
+            </Col>
+        </Row>
     )
 }
 
