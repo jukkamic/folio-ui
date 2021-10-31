@@ -99,7 +99,6 @@ function populateData(props, setEdit, getAccessTokenSilently, setTitle, setConte
     if (props.edit) {
         setEdit(props.edit);
     }
-    console.log("props id " + props.id + ", edit " + edit);
     if (props.show && props.id && !edit) {
         async function fetchData() {
             blogApi.getPost(getAccessTokenSilently, props.id).then((results) => {

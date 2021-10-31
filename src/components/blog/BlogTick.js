@@ -15,8 +15,6 @@ function BlogTick() {
     const handleShow = (e) => {
         setId(e.target.id);
         setShow(true);
-        console.log("target id " + e.target.id);
-        console.log("id = " + id);
     }
 
     const handleHide = () => {
