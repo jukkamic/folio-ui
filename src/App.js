@@ -15,8 +15,9 @@ import { useAuth0 } from "@auth0/auth0-react";
 import LoginPage from './components/LoginPage';
 import LogoutButton from './components/LogoutButton';
 import LoginButton from './components/LoginButton';
-import Blog from './components/Blog';
+import Blog from './components/blog/Blog';
 import NewsComponent from './components/news/NewsComponent';
+import BlogTick from './components/blog/BlogTick';
 
 const WALLET_URL = process.env.REACT_APP_WALLET_URL;
 
@@ -129,6 +130,7 @@ function App() {
         </Row>
         <Row>
           <Col md={{"span": 10, "offset": 1}} style={{"borderRadius": "6px", "border": "1px dotted gray", "padding": 0}}>
+            <BlogTick />
             <NewsTickerRow rowKey="priceRow" speed={9} newsItems={priceItems} />
             <NewsComponent />
           </Col>

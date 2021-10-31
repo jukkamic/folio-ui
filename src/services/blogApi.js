@@ -14,6 +14,34 @@ const listPosts = async (getAccessTokenSilently) => {
     }    
 }
 
+const getPost = async (getAccessTokenSilently, id) => {
+    try {
+        const token = await getAccessTokenSilently();
+        var options = {
+            method: 'GET',
+            url: "http://localhost:8000/folio/blog/posts/" + id,
+            headers: {Authorization: 'Bearer ' + token},
+        }
+        return await axios.request(options);        
+    } catch (error) {
+        console.log(error.message)
+    }    
+}
+
+const latestPosts = async (getAccessTokenSilently, number) => {
+    try {
+        const token = await getAccessTokenSilently();
+        var options = {
+            method: 'GET',
+            url: "http://localhost:8000/folio/blog/posts/latest/" + number,
+            headers: {Authorization: 'Bearer ' + token},
+        }
+        return await axios.request(options);        
+    } catch (error) {
+        console.log(error.message)
+    }    
+}
+
 const createPost = async(getAccessTokenSilently, postjson) => {
     try {
         const token = await getAccessTokenSilently();
@@ -31,5 +59,7 @@ const createPost = async(getAccessTokenSilently, postjson) => {
 
 export const blogApi = {
     createPost,
-    listPosts
+    listPosts,
+    latestPosts,
+    getPost
 }
