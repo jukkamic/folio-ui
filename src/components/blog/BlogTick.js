@@ -15,6 +15,8 @@ function BlogTick() {
     const handleShow = (e) => {
         setId(e.target.id);
         setShow(true);
+        console.log("target id " + e.target.id);
+        console.log("id = " + id);
     }
 
     const handleHide = () => {
@@ -43,7 +45,7 @@ function BlogTick() {
     return(
         <>
         <div className="vwrap"><div className="vmove">
-            {posts.map( post => <div key={post["id"]} className="vitem"><span key="hep" id={post["id"]} onClick={handleShow}>{post["title"]}</span></div>)}
+            {posts.map( post => <div key={post["id"]} className="vitem"><b><span key="hep" id={post["id"]} onClick={handleShow}>{post["title"]}</span></b></div>)}
         </div></div>
         <BlogModal show={show} handleHide={handleHide} id={id}/>
         </>

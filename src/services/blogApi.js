@@ -57,9 +57,24 @@ const createPost = async(getAccessTokenSilently, postjson) => {
     }    
 };
 
+const deletePost = async(getAccessTokenSilently, id) => {
+    try {
+        const token = await getAccessTokenSilently();
+        var options = {
+            method: 'DELETE',
+            url: "http://localhost:8000/folio/blog/posts/" + id,
+            headers: {Authorization: 'Bearer ' + token, 'Content-Type': 'application/json'}
+        }
+        axios.request(options);        
+    } catch (error) {
+        console.log(error.message)
+    }    
+}
+
 export const blogApi = {
     createPost,
     listPosts,
     latestPosts,
-    getPost
+    getPost,
+    deletePost
 }

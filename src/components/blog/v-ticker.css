@@ -21,12 +21,15 @@
   25% { bottom: 30px; } /* SECOND ITEM */
   50% { bottom: 60px; } /* THIRD ITEM */
   75% { bottom: 90px; } /* FORTH ITEM */
-  100% { bottom: 120px; } /* BACK TO FIRST */
+  100% { bottom: 0px; } /* BACK TO FIRST */
 }
 .vmove {
   animation-name: tickerv;
-  animation-duration: 20s;
+  animation-duration: 30s;
   animation-iteration-count: infinite;
   animation-timing-function: cubic-bezier(1, 0, .5, 0);
 }
-.vmove:hover { animation-play-state: paused; }
+.vmove:hover { 
+  animation-play-state: paused; 
+  text-decoration: underline;
+}
