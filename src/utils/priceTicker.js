@@ -35,9 +35,12 @@ export function createPriceTickerItems(data) {
                 var url = "";
                 if (asset === "TEL") {
                     url = "https://coinmarketcap.com/currencies/telcoin/";
-                } else {
+                }
+                else if (asset === "BETH") {
+                    url = "https://www.binance.com/en/trade/BETH_ETH";
+                }
+                else {
                     url = "https://www.binance.com/en/trade/" + asset + "_USDT";
-
                 }
                 tickerItems.push( (<Tick key={asset} symbol={asset} price={rounded} url={url} change={change}/>) );
             }

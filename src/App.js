@@ -2,7 +2,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState, useEffect } from 'react';
 import useInterval from 'react-useinterval';
-import { Container, Col, Row, Accordion } from 'react-bootstrap';
+import { Button, Container, Col, Row, Accordion } from 'react-bootstrap';
 import axios from "axios";
 import MyDoughnut from './components/MyDoughnut';
 import MyPortfolioRow from './components/MyPortfolioRow';
@@ -21,10 +21,10 @@ import BlogTick from './components/blog/BlogTick';
 
 const WALLET_URL = process.env.REACT_APP_WALLET_URL;
 
-async function fetchWalletData(isAuthenticated, token) {
+async function fetchWalletData(isAuthenticated, token, beth2eth) {
   if(isAuthenticated) {
     try {
-      const res = await axios.get(WALLET_URL, {headers: {Authorization: "Bearer " + token}});
+      const res = await axios.get(WALLET_URL, {params: {"beth2eth": beth2eth}, headers: {Authorization: "Bearer " + token}});
       // const res = await axios.request(options);
       return await res?.data;
     } catch (err) {
@@ -47,9 +47,10 @@ function App() {
   const [symbols, setSymbols] = useState([]);
   const [priceItems, setPriceItems] = useState([(<NewsTick name="0" title="Prices coming in..." url="#"/> )]);
   const [total, setTotal] = useState(0);
+  const [beth2eth, setBeth2eth] = useState(false);
   
-  async function setData(isAuthenticated, token) {
-    fetchWalletData(isAuthenticated, token).then( data => {
+  async function setData(isAuthenticated, token, beth2eth) {
+    fetchWalletData(isAuthenticated, token, beth2eth).then( data => {
       setWalletData(data);
       const total = countTotal(data);
       setTotal(total);
@@ -78,7 +79,7 @@ function App() {
         audience: "https://folio.kotkis.fi/",
         scope: "read:all",
       }).then( (token) => {
-        setData(isAuthenticated, token);
+        setData(isAuthenticated, token, beth2eth);
       }).catch( err => {
         console.log(err);
       })
@@ -92,10 +93,15 @@ function App() {
         audience: "https://folio.kotkis.fi/",
         scope: "read:all",
       }).then( (token) => {
-        setData(isAuthenticated, token);
+        setData(isAuthenticated, token, beth2eth);
       })
     }
-  }, [getAccessTokenSilently, isAuthenticated, user]);
+  }, [getAccessTokenSilently, isAuthenticated, user, beth2eth]);
+
+  const handleBeth2eth = () => {
+    setBeth2eth(!beth2eth);
+    setLoading(true);
+  }
 
   if (!isAuthenticated) {
     return <LoginPage />
@@ -110,8 +116,13 @@ function App() {
             <MyPortfolioRow name="Zippo" og={loading ? "0" : "542.39"} share="0.23066759947" total={total} />
             <MyPortfolioRow name="VV" og={loading ? "0" : "46.14"} share="0.01885325627" total={total} />
             <DepositModalRow total={total} walletData={walletData}/>
-            {isAuthenticated ? <LogoutButton /> : <LoginButton />} 
             {user?.email === "jukkamic@gmail.com" ? <Blog /> : ""}
+            {loading ? 
+              <Button disabled variant={beth2eth ? "danger" : "success"} onClick={handleBeth2eth}>{beth2eth ? "BETH = ETH" : "BETH true price"}</Button> 
+              :
+              <Button variant={beth2eth ? "danger" : "success"} onClick={handleBeth2eth}>{beth2eth ? "BETH = ETH" : "BETH true price"}</Button> 
+            }   
+            {isAuthenticated ? <LogoutButton /> : <LoginButton />} 
           </Col>
           <Col md={{"span": 8}} style={{}}>
                 <Accordion defaultActiveKey="0" flush={true}>
