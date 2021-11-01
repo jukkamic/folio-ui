@@ -35,7 +35,7 @@ const latestPosts = async (getAccessTokenSilently, number) => {
         const token = await getAccessTokenSilently();
         var options = {
             method: 'GET',
-            url: BLOG_URL + number,
+            url: BLOG_URL + "latest/" + number,
             headers: {Authorization: 'Bearer ' + token},
         }
         return await axios.request(options);        
