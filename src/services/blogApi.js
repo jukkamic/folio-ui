@@ -1,11 +1,13 @@
 import axios from 'axios';
 
+const BLOG_URL = process.env.REACT_APP_BLOG_URL;
+
 const listPosts = async (getAccessTokenSilently) => {
     try {
         const token = await getAccessTokenSilently();
         var options = {
             method: 'GET',
-            url: "http://localhost:8000/folio/blog/posts/",
+            url: BLOG_URL,
             headers: {Authorization: 'Bearer ' + token},
         }
         return await axios.request(options);        
@@ -19,7 +21,7 @@ const getPost = async (getAccessTokenSilently, id) => {
         const token = await getAccessTokenSilently();
         var options = {
             method: 'GET',
-            url: "http://localhost:8000/folio/blog/posts/" + id,
+            url: BLOG_URL + id,
             headers: {Authorization: 'Bearer ' + token},
         }
         return await axios.request(options);        
@@ -33,7 +35,7 @@ const latestPosts = async (getAccessTokenSilently, number) => {
         const token = await getAccessTokenSilently();
         var options = {
             method: 'GET',
-            url: "http://localhost:8000/folio/blog/posts/latest/" + number,
+            url: BLOG_URL + number,
             headers: {Authorization: 'Bearer ' + token},
         }
         return await axios.request(options);        
@@ -47,7 +49,7 @@ const createPost = async(getAccessTokenSilently, postjson) => {
         const token = await getAccessTokenSilently();
         var options = {
             method: 'POST',
-            url: "http://localhost:8000/folio/blog/posts/",
+            url: BLOG_URL,
             headers: {Authorization: 'Bearer ' + token, 'Content-Type': 'application/json'},
             data: postjson
         }
@@ -62,7 +64,7 @@ const deletePost = async(getAccessTokenSilently, id) => {
         const token = await getAccessTokenSilently();
         var options = {
             method: 'DELETE',
-            url: "http://localhost:8000/folio/blog/posts/" + id,
+            url: BLOG_URL + id,
             headers: {Authorization: 'Bearer ' + token, 'Content-Type': 'application/json'}
         }
         axios.request(options);        
