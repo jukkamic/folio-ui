@@ -1,31 +1,44 @@
 import { useEffect, useState } from "react";
-import { Button, Col, Form, Modal, Row } from "react-bootstrap";
+import { Button, Col, Form, Modal } from "react-bootstrap";
 import { useAuth0 } from "@auth0/auth0-react";
 import { blogApi } from "../../services/blogApi";
 
 const BlogModal = (props) => {
     const { user, getAccessTokenSilently } = useAuth0();
-    const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
-    const [author, setAuthor] = useState("Companyman");
     const [edit, setEdit] = useState(false);
+    const [post, setPost] = useState({"title": "", "content": ""});
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const myjson = {"title": title, "content": content, "author": "1", "id": props.id}
-        blogApi.createPost(getAccessTokenSilently, myjson);
-        setTitle("");
-        setContent("");
+        var copy = {...post}
+        copy["id"] = props.id;
+        // Sick and tired of the whole screen crashing and burning with null pointers
+        if (e.target.author.value) {
+            copy["author"] = e.target.author.value;
+        } else {
+            copy["author"] = e.target.elements.author.value;
+        }
+        setPost(copy);
+        if (copy["author"] && copy["author"] !== "") {
+            blogApi.createPost(getAccessTokenSilently, copy);
+        } else {
+            console.log("Error submitting post. Author: ", copy["author"]);
+        }
+        setPost({});
         setEdit(false);
         props.handleHide();
     }
 
     const onTitleChange = (e) => {
-        setTitle(e.target.value);
+        var copy = { ...post };
+        copy["title"] = e.target.value;
+        setPost(copy);
     };
 
     const onContentChange = (e) => {
-        setContent(e.target.value);
+        var copy = { ...post };
+        copy["content"] = e.target.value;
+        setPost(copy);
     }
 
     const toggleEdit = () => {
@@ -33,8 +46,7 @@ const BlogModal = (props) => {
     }
 
     const handleHide = () => {
-        setTitle("");
-        setContent("");
+        setPost({});
         setEdit(false);
         props.handleHide();
     }
@@ -45,7 +57,7 @@ const BlogModal = (props) => {
     }
 
     useEffect( () => {
-        populateData(props, setEdit, getAccessTokenSilently, setTitle, setContent, setAuthor, edit);
+        populateData(props, setEdit, getAccessTokenSilently, setPost, edit);
     }, [props, getAccessTokenSilently, edit]);
 
     return(
@@ -53,8 +65,8 @@ const BlogModal = (props) => {
         <Form onSubmit={handleSubmit}>
             <Modal.Header>
                 <Modal.Title>                    
-                    { props.id !== "" && !edit ? <>{title}</> : 
-                    <Form.Control size="lg" name="title" width={60} type="text" value={title} 
+                    { props.id !== "" && !edit ? <>{post["title"]}</> : 
+                    <Form.Control size="lg" name="title" width={60} type="text" value={post["title"]} 
                                         placeholder="Title" onChange={onTitleChange}/>
                     }
                 </Modal.Title>
@@ -65,9 +77,9 @@ const BlogModal = (props) => {
                     }
             </Modal.Header>
             <Modal.Body>
-                    { props.id !== "" && !edit ? <div style={{"white-space": "pre-line"}}>{content}</div> : 
+                    { props.id !== "" && !edit ? <div style={{"whiteSpace": "pre-line"}}>{post["content"]}</div> : 
                     <>
-                    <Form.Control rows={12} as="textarea" name="content" value={content} 
+                    <Form.Control rows={12} as="textarea" name="content" value={post["content"]} 
                                     placeholder="Content" onChange={onContentChange} /> 
                     <Button variant="primary" type="submit">
                         { props.id !== "" ? <>Update</> : <>Post</> }
@@ -80,11 +92,13 @@ const BlogModal = (props) => {
                     }
                     </Modal.Body>
             <Modal.Footer>
-                <Row>
-                    <Col>
-                    <b>Author: {props.id !== "" ? <>{author}</> : <>Companyman</>}</b> 
-                    </Col>
-                </Row>
+                <Col span={8} style={{"alignContent": "left"}}>
+                    <b>{props.id !== "" ? <>{post["author_name"]}</> : "Companyman"}</b> 
+                </Col>
+                <Col>
+                    {post["created_on"] !== "" ? <>{stampToText(post["created_on"])}</> : ""}
+                    {post["updated_on"] !== "" && post["updated_on"] > post["created_on"] ? <><br />Updated {stampToText(post["updated_on"])}</> : ""}
+                </Col>
             </Modal.Footer>
             <input type="hidden" name="id" value={props.id} /> 
             <input type="hidden" name="author" value="1" />
@@ -95,17 +109,25 @@ const BlogModal = (props) => {
 
 export default BlogModal;
 
-function populateData(props, setEdit, getAccessTokenSilently, setTitle, setContent, setAuthor, edit) {
+function stampToText(timestamp) {
+    if ( timestamp !== null && timestamp !== "" ) {
+        const d = new Date(timestamp);
+        const s = d.getDate() + "." + parseInt(d.getMonth() + 1) + "." + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + "." + d.getSeconds();
+        return s;
+    } else {
+        return timestamp;
+    }
+}
+
+function populateData(props, setEdit, getAccessTokenSilently, setPost, edit) {
     if (props.edit) {
         setEdit(props.edit);
     }
-    if (props.show && props.id && !edit) {
+    if (props.show && props.id !== "" && !edit) {
         async function fetchData() {
             blogApi.getPost(getAccessTokenSilently, props.id).then((results) => {
                 const post = JSON.parse(results.data);
-                setTitle(post["title"]);
-                setContent(post["content"]);
-                setAuthor(post["author"]);
+                setPost(post);
             });
         }
         fetchData();

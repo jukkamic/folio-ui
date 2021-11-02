@@ -25,7 +25,11 @@ function BlogTick() {
         async function fetchData() {
             await blogApi.latestPosts(getAccessTokenSilently, 4).then( (results) => {
                 // console.log(JSON.parse(results.data));
-                setPosts(JSON.parse(results.data));
+                if( results && results.data ) { 
+                    setPosts(JSON.parse(results.data));
+                } else {
+                    console.log("Error with fetching posts. Result: ", results);
+                }
             });
         }
         fetchData();
@@ -35,7 +39,11 @@ function BlogTick() {
         async function fetchData() {
             const results = await blogApi.latestPosts(getAccessTokenSilently, 4);
             // console.log(JSON.parse(results.data));
-            setPosts(JSON.parse(results.data));
+            if( results && results.data ) { 
+                setPosts(JSON.parse(results.data));
+            } else {
+                console.log("Error with fetching posts. Result: ", results);
+            }
         }
         fetchData();
     }, 22000);
@@ -43,7 +51,7 @@ function BlogTick() {
     return(
         <>
         <div className="vwrap"><div className="vmove">
-            {posts.map( post => <div key={post["id"]} className="vitem"><b><span key="hep" id={post["id"]} onClick={handleShow}>{post["title"]}</span></b></div>)}
+            {posts.map( post => <div key={post["id"] + "div"} className="vitem"><b key={post["id"] + "b"}><span key={post["id"] + "span"} id={post["id"]} onClick={handleShow}>{post["title"]}</span></b></div>)}
         </div></div>
         <BlogModal show={show} handleHide={handleHide} id={id}/>
         </>

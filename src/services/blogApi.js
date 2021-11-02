@@ -48,7 +48,8 @@ const createPost = async(getAccessTokenSilently, postjson) => {
     try {
         var method = "POST";
         const token = await getAccessTokenSilently();
-        if (postjson["id"] !== null && postjson["id"] !== "") {
+        // Do we have id? DO WE?
+        if (postjson["id"] && postjson["id"] !== null && postjson["id"] !== "") {
             method = "PUT";
         }
         var options = {
