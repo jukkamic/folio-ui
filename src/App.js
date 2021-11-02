@@ -112,7 +112,7 @@ function App() {
       <Container fluid className="app-main">
         <Row style={{"marginBottom": 0}}>
           <Col md={{"span": 2, "offset": 1}} style={{"paddingRight": "8px", "textAlign": "right"}}>
-            <MyPortfolioRow name="Companyman" og={loading ? "0" : "1764.67"} share="0.75047914435" total={total} />
+            <MyPortfolioRow name="Companyman" og={loading ? "0" : "2177.72"} share="0.7703126216" total={total} />
             <MyPortfolioRow name="Zippo" og={loading ? "0" : "542.39"} share="0.23066759947" total={total} />
             <MyPortfolioRow name="VV" og={loading ? "0" : "46.14"} share="0.01885325627" total={total} />
             <DepositModalRow total={total} walletData={walletData}/>
