@@ -53,7 +53,7 @@ const BlogModal = (props) => {
         <Form onSubmit={handleSubmit}>
             <Modal.Header>
                 <Modal.Title>                    
-                    { props.id && !edit ? <>{title}</> : 
+                    { props.id !== "" && !edit ? <>{title}</> : 
                     <Form.Control size="lg" name="title" width={60} type="text" value={title} 
                                         placeholder="Title" onChange={onTitleChange}/>
                     }
@@ -65,12 +65,12 @@ const BlogModal = (props) => {
                     }
             </Modal.Header>
             <Modal.Body>
-                    { props.id && !edit ? <div style={{"white-space": "pre-line"}}>{content}</div> : 
+                    { props.id !== "" && !edit ? <div style={{"white-space": "pre-line"}}>{content}</div> : 
                     <>
                     <Form.Control rows={12} as="textarea" name="content" value={content} 
                                     placeholder="Content" onChange={onContentChange} /> 
                     <Button variant="primary" type="submit">
-                        { props.id ? <>Update</> : <>Post</> }
+                        { props.id !== "" ? <>Update</> : <>Post</> }
                     </Button>
                     <Button variant="danger" type="submit" 
                             onClick={() => { if (window.confirm('Are you sure you wish to delete this post?') ) handleDelete(); } }>
@@ -82,7 +82,7 @@ const BlogModal = (props) => {
             <Modal.Footer>
                 <Row>
                     <Col>
-                    <b>Author: {props.id ? <>{author}</> : <>Companyman</>}</b> 
+                    <b>Author: {props.id !== "" ? <>{author}</> : <>Companyman</>}</b> 
                     </Col>
                 </Row>
             </Modal.Footer>

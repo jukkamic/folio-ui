@@ -19,7 +19,7 @@ function Blog() {
                 <Button style={{"color": "black", "backgroundColor": "#E7F1FF", "width": "100%"}} onClick={handleShow}> 
                 <b>Post report</b>
                 </Button>
-                <BlogModal edit={true} id={null} show={show} handleHide={handleHide} />
+                <BlogModal edit={true} id={""} show={show} handleHide={handleHide} />
             </Col>
         </Row>
     )

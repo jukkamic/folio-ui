@@ -10,7 +10,7 @@ function BlogTick() {
     const [posts, setPosts] = useState([<div className="vitem">Expecting results...</div>]);
     const { getAccessTokenSilently } = useAuth0();
     const [show, setShow] = useState(false);
-    const [id, setId] = useState(0);
+    const [id, setId] = useState("");
 
     const handleShow = (e) => {
         setId(e.target.id);

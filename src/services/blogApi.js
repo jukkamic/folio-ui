@@ -46,9 +46,13 @@ const latestPosts = async (getAccessTokenSilently, number) => {
 
 const createPost = async(getAccessTokenSilently, postjson) => {
     try {
+        var method = "POST";
         const token = await getAccessTokenSilently();
+        if (postjson["id"] !== null && postjson["id"] !== "") {
+            method = "PUT";
+        }
         var options = {
-            method: 'POST',
+            method: method,
             url: BLOG_URL,
             headers: {Authorization: 'Bearer ' + token, 'Content-Type': 'application/json'},
             data: postjson
