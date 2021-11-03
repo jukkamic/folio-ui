@@ -31,11 +31,11 @@ const MyPortfolioRow = (props) => {
     <Accordion defaultActiveKey="0">
       <Accordion.Item eventKey="0">
       <Accordion.Header>
-        <span style={{"color": "black"}}><b>{props.name}</b> {netPercentage(props.og, props.share, props.total)}</span>
+        <span style={{"color": "black"}}><b>{props.name}</b> {props.loading? "Loading" : netPercentage(props.og, props.share, props.total)}</span>
       </Accordion.Header>
       <Accordion.Body>
-      {Intl.NumberFormat('en-US').format(shareValue(props.share, props.total))} USDT
-      <br />{netUSDT(props.og, props.share, props.total)}
+      {props.loading ? "Loading" : Intl.NumberFormat('en-US').format(shareValue(props.share, props.total))} USDT
+      <br />{props.loading? "Loading" : netUSDT(props.og, props.share, props.total)}
       </Accordion.Body>
       </Accordion.Item>
     </Accordion>

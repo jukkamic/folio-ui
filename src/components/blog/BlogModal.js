@@ -96,7 +96,7 @@ const BlogModal = (props) => {
                     <b>{props.id !== "" ? <>{post["author_name"]}</> : "Companyman"}</b> 
                 </Col>
                 <Col>
-                    {post["created_on"] !== "" ? <>{stampToText(post["created_on"])}</> : ""}
+                    {post["created_on"] !== "" && post["created_on"] ? <>{stampToText(post["created_on"])}</> : ""}
                     {post["updated_on"] !== "" && post["updated_on"] > post["created_on"] ? <><br />Updated {stampToText(post["updated_on"])}</> : ""}
                 </Col>
             </Modal.Footer>

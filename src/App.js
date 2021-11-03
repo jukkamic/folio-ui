@@ -66,8 +66,12 @@ function App() {
   }
 
   useEffect( () => {
-    if (Object.keys(walletData).length > 0) {
-      setLoading(false);
+    if (walletData && Object.keys(walletData)) {
+      if (Object.keys(walletData).length > 0) {
+        setLoading(false);
+      }
+    } else {
+      console.log("Possibly null walletdata: ", walletData)
     }
   }, [walletData]);
   
@@ -112,9 +116,9 @@ function App() {
       <Container fluid className="app-main">
         <Row style={{"marginBottom": 0}}>
           <Col md={{"span": 2, "offset": 1}} style={{"paddingRight": "8px", "textAlign": "right"}}>
-            <MyPortfolioRow name="Companyman" og={loading ? "0" : "1989.38"} share="0.77" total={total} />
-            <MyPortfolioRow name="Zippo" og={loading ? "0" : "542.39"} share="0.21" total={total} />
-            <MyPortfolioRow name="VV" og={loading ? "0" : "46.14"} share="0.02" total={total} />
+            <MyPortfolioRow name="Companyman" loading={loading} og={loading ? "0" : "1989.38"} share="0.77" total={total} />
+            <MyPortfolioRow name="Zippo" loading={loading} og={loading ? "0" : "542.39"} share="0.21" total={total} />
+            <MyPortfolioRow name="VV" loading={loading} og={loading ? "0" : "46.14"} share="0.02" total={total} />
             <DepositModalRow total={total} walletData={walletData}/>
             {user?.email === "jukkamic@gmail.com" ? <Blog /> : ""}
             {loading ? 
