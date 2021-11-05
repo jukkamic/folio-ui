@@ -5,29 +5,24 @@ import reportWebVitals from './reportWebVitals';
 import {
   BrowserRouter,
   Routes,
-  Route
+  Route,
+  Outlet
 } from "react-router-dom";
-import { Auth0Provider } from "@auth0/auth0-react";
-import Home from './pages/home/Home';
+import Auth0ProviderWithHistory from './auth/auth0-provider-with-history';
+import ChartPage from './pages/chart/ChartPage';
+import { MainNav } from './components/MainNav';
 
 ReactDOM.render(
-    <Auth0Provider
-      domain="dev-88-mri1m.us.auth0.com"
-      clientId="JzTCnrphpHGiksYWnZNEtCgTq5tXsODZ"
-      // ViSWsNBtyRoviyX6Gt32FbkG9VgbtCGF
-      redirectUri={window.location.origin}
-//      audience="https://dev-88-mri1m.us.auth0.com/api/v2/"
-      audience="https://folio.kotkis.fi/"
-      scope="read:all"
-      useRefreshTokens={true}
-      >
-         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<App />} />
-            <Route path="home" element={<Home />} />
-          </Routes>
-        </BrowserRouter>
-    </Auth0Provider>
+  <BrowserRouter>
+    <Auth0ProviderWithHistory>
+      <MainNav />
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="charts" element={<ChartPage />} />
+      </Routes>
+      <Outlet />
+    </Auth0ProviderWithHistory>
+  </BrowserRouter>
   ,
   document.getElementById('root')
 );
