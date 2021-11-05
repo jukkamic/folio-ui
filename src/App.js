@@ -18,6 +18,8 @@ import LoginButton from './components/LoginButton';
 import Blog from './components/blog/Blog';
 import NewsComponent from './components/news/NewsComponent';
 import BlogTick from './components/blog/BlogTick';
+import { Outlet } from "react-router-dom";
+import { MainNav } from './components/MainNav';
 
 const WALLET_URL = process.env.REACT_APP_WALLET_URL;
 
@@ -113,6 +115,9 @@ function App() {
 
   return (
     <div className="App">
+      <MainNav />
+      <Outlet />
+
       <Container fluid className="app-main">
         <Row style={{"marginBottom": 0}}>
           <Col md={{"span": 2, "offset": 1}} style={{"paddingRight": "8px", "textAlign": "right"}}>
