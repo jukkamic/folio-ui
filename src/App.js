@@ -21,7 +21,6 @@ function App() {
   const [refresh, setRefresh] = useState(false);
 
   useEffect( () => {
-    console.log("useEffect....!?");
     async function fetchWalletData() {
       const token = await getAccessTokenSilently({
         audience: "https://folio.kotkis.fi/",

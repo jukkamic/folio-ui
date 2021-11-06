@@ -18,23 +18,15 @@ function Home(props) {
     const [total, setTotal] = useState(0);
     
     useEffect( () => {
-        if (!props.loading) {
-            if( props.walletData ) {
-                console.log("wallet data " + JSON.stringify(props.walletData));
-                const total = countTotal(props.walletData);
-                setTotal(total);
-                const [symbols, values] = parseSymbolsValues(props.walletData, total, true);  
-                setSymbols(symbols);
-                setValues(values);
-                const round_total = Math.round(parseFloat((total) + Number.EPSILON) * 100) / 100;
-                setTitle("Total " + Intl.NumberFormat('en-US').format(round_total) + " USDT");  
-                setPriceItems(createPriceTickerItems(props.walletData));
-                console.log("setting loading to false");
-                setLoading(false);
-            }
-        } else {
-            console.log("LOADING");
-        }
+        const total = countTotal(props.walletData);
+        setTotal(total);
+        const [symbols, values] = parseSymbolsValues(props.walletData, total, true);  
+        setSymbols(symbols);
+        setValues(values);
+        const round_total = Math.round(parseFloat((total) + Number.EPSILON) * 100) / 100;
+        setTitle("Total " + Intl.NumberFormat('en-US').format(round_total) + " USDT");  
+        setPriceItems(createPriceTickerItems(props.walletData));
+        setLoading(false);
     }, [props.loading, props.walletData]);
 
     return(

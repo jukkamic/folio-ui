@@ -51,6 +51,7 @@ function DepositModal(props) {
 
     const handleShow = () => {
         setTotal( countTotal(props.walletData) );
+        setShow(true);
     }
 
     const handleAmount = (e) => {
@@ -241,9 +242,12 @@ function DepositModal(props) {
     // }
 
     function calculateShare() {
-        const totalPlusAmount = parseFloat(total) + parseFloat(amountInUsdt);
-        const share = amountInUsdt / totalPlusAmount;
-        return share;
+        if (amountInUsdt && total) {
+            const totalPlusAmount = parseFloat(total) + parseFloat(amountInUsdt);
+            const share = amountInUsdt / totalPlusAmount;
+            return share;
+        }
+        return 0;
     }
 
     function calculatePriceInCoin(amount) {
