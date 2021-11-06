@@ -1,26 +1,15 @@
 import ReactDOM from 'react-dom';
 import './index.css';
+import 'bootstrap/dist/css/bootstrap.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Outlet
-} from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import Auth0ProviderWithHistory from './auth/auth0-provider-with-history';
-import ChartPage from './pages/chart/ChartPage';
-import { MainNav } from './components/MainNav';
 
 ReactDOM.render(
   <BrowserRouter>
     <Auth0ProviderWithHistory>
-      <MainNav />
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="charts" element={<ChartPage />} />
-      </Routes>
-      <Outlet />
+      <App />
     </Auth0ProviderWithHistory>
   </BrowserRouter>
   ,

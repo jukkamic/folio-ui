@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Col, Row } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import BlogModal from "./BlogModal";
 
 function Blog() {
@@ -14,14 +14,12 @@ function Blog() {
     }
 
     return(
-        <Row>
-            <Col style={{"textAlign": "center", "padding": "8px"}}>
-                <Button style={{"color": "black", "backgroundColor": "#E7F1FF", "width": "100%"}} onClick={handleShow}> 
-                <b>Post report</b>
-                </Button>
-                <BlogModal edit={true} id={""} show={show} handleHide={handleHide} />
-            </Col>
-        </Row>
+        <>
+        <Button style={{"color": "black", "backgroundColor": "#E7F1FF", "width": "100%"}} onClick={handleShow}> 
+        <b>Post report</b>
+        </Button>
+        <BlogModal edit={true} id={""} show={show} handleHide={handleHide} />
+        </>
     )
 }
 

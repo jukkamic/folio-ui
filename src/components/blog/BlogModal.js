@@ -61,7 +61,7 @@ const BlogModal = (props) => {
     }, [props, getAccessTokenSilently, edit]);
 
     return(
-        <Modal show={props.show} onHide={handleHide} id="blogModal">
+        <Modal show={props.show} onHide={props.handleHide} id="blogModal">
         <Form onSubmit={handleSubmit}>
             <Modal.Header>
                 <Modal.Title>                    
