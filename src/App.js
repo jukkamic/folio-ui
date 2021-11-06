@@ -43,7 +43,7 @@ function App() {
 
   useInterval( () => {
     setRefresh(!refresh);
-  }, 12000);
+  }, 13000);
 
 
   if (error) {
@@ -51,8 +51,7 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <Container fluid className="app-main">
+      <Container fluid>
         <MainNav walletData={walletData} />
         <Routes>
           <Route path="/" element={<Home loading={loading} walletData={walletData}/>} />
@@ -60,7 +59,6 @@ function App() {
         </Routes>
         <Outlet />
       </Container>
-    </div>
   );
 
 }
