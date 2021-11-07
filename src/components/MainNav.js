@@ -1,4 +1,4 @@
-import { Nav, Row, Col } from "react-bootstrap";
+import { Container, Navbar, Row, Col } from "react-bootstrap";
 import AuthenticationButton from "./auth/AuthenticationButton";
 import DepositModal from './DepositModal';
 import { useAuth0 } from "@auth0/auth0-react";
@@ -10,21 +10,24 @@ export function MainNav(props) {
     return (
         <Row>
             <Col>
-                <Nav activeKey="/">
-                    <Nav.Item>
-                        <Nav.Link href="/">Folio</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link href="/charts">Chart</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <DepositModal walletData={props.walletData} />
-                    </Nav.Item>
-                    {user?.email === "jukkamic@gmail.com" ? <Nav.Item><Blog /></Nav.Item> : ""}
-                    <Nav.Item>
-                        <AuthenticationButton />
-                    </Nav.Item>
-                </Nav>
+  <Navbar bg="black" variant="dark">
+    <Container>
+      <Navbar.Brand href="/">
+        <img
+          alt=""
+          src="/kotkis25-cr.jpg"
+          width="59"
+          height="30"
+          className="d-inline-block align-top"
+        />{' '}
+      Kotkis Folio
+      </Navbar.Brand>
+
+      <Navbar.Collapse className="justify-content-end">
+          <AuthenticationButton />
+        </Navbar.Collapse>
+    </Container>
+  </Navbar>
             </Col>
         </Row>
 
