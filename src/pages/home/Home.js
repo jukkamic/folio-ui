@@ -8,6 +8,7 @@ import NewsTickerRow from '../../components/NewsTickerRow';
 import NewsTick from '../../components/NewsTick';
 import NewsComponent from '../../components/news/NewsComponent';
 import BlogTick from '../../components/blog/BlogTick';
+import Blog from '../../components/blog/Blog';
 import { Spinner } from '../../components/Spinner';
 import { createPriceTickerItems } from '../../utils/priceTicker';
 import { countTotal, parseSymbolsValues } from '../../utils/walletParser';
@@ -20,6 +21,7 @@ function Home(props) {
     const [symbols, setSymbols] = useState([]);
     const [priceItems, setPriceItems] = useState([(<NewsTick name="0" title="Prices coming in..." url="#"/> )]);
     const [total, setTotal] = useState(0);
+    const [mobile, setMobile] = useState("0");
     const size = useWindowSize();
     
     useEffect( () => {
@@ -34,7 +36,18 @@ function Home(props) {
         setLoading(props.loading);
     }, [props.loading, props.walletData]);
 
-    console.log("Window width " + size.width)
+
+    if ( size.width < 768 ) {
+      if (mobile !== null) {
+        setMobile(null);
+      }
+    }
+
+    if (size.width >= 768) {
+      if (mobile !== "0") {
+        setMobile("0");
+      }
+    }
     return(
         <>
         <Row>
@@ -45,22 +58,23 @@ function Home(props) {
                     <Portfolio name="VV" email="varimo@iki.fi" og="162.09" share="0.0613" total={total} />
                 </Accordion>
                 }
+                <Blog />
             </Col>
             <Col md={{"span": 9}}>
-                  <Accordion defaultActiveKey={parseInt(size.width) <= parseInt(767) ? "x" : "0"}>
-                    <Accordion.Item eventKey="0">
-                      <Accordion.Header><h4 style={{"color": "black"}}>{title}</h4></Accordion.Header>
-                      <Accordion.Body>
-                        <Row style={{"marginTop": "0px", "paddingBottom": "8px"}}>
-                          <Col>
-                            {loading ? <Spinner /> :
-                            <MyDoughnut symbols={symbols} values={values}/>
-                            }
-                          </Col>
-                        </Row>
-                      </Accordion.Body>
-                    </Accordion.Item>
-                  </Accordion>
+              <Accordion defaultActiveKey={mobile}>
+                <Accordion.Item eventKey="0">
+                  <Accordion.Header><h4 style={{"color": "black"}}>{title}</h4></Accordion.Header>
+                  <Accordion.Body>
+                    <Row style={{"marginTop": "0px", "paddingBottom": "8px"}}>
+                      <Col>
+                        {loading ? <Spinner /> :
+                        <MyDoughnut symbols={symbols} values={values}/>
+                        }
+                      </Col>
+                    </Row>
+                  </Accordion.Body>
+                </Accordion.Item>
+              </Accordion>
             </Col>
           </Row>
           <Row>

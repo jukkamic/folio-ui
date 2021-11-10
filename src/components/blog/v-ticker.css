@@ -8,6 +8,8 @@
 .vwrap {
   overflow: hidden; /* HIDE SCROLL BAR */
   background: #FFD580;
+  /* background: orange; */
+  border: 2px solid orange;
 }
 
 /* (C) TICKER ITEMS */

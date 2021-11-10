@@ -1,11 +1,7 @@
 import { Container, Navbar, Row, Col } from "react-bootstrap";
 import AuthenticationButton from "./auth/AuthenticationButton";
-import DepositModal from './DepositModal';
-import { useAuth0 } from "@auth0/auth0-react";
-import Blog from './blog/Blog';
 
-export function MainNav(props) {
-    const { user } = useAuth0();
+export function MainNav() {
 
     return (
         <Row>
