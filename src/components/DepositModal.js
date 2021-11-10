@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Col, FloatingLabel, Form, Image, Modal, Row } from "react-bootstrap";
 import axios from "axios";
+import { countTotal } from '../utils/walletParser';
 
 const DEPOSIT_ADDR_URL = process.env.REACT_APP_WALLET_URL + "deposits/addr/";
 const USD = "USDT";
@@ -31,7 +32,7 @@ function getPriceFromWalletData(coin, data) {
       }    
 }
 
-function DepositModalRow(props) {
+function DepositModal(props) {
     const [show, setShow] = useState(false);
     const [addr, setAddr] = useState("Fetching address...");
     const [coin, setCoin] = useState(USD);
@@ -39,6 +40,7 @@ function DepositModalRow(props) {
     const [inputUsdt, setInputUsdt] = useState(false);
     const [amountInCoin, setAmountInCoin] = useState(0);
     const [copiedToClipboard, setCopiedToClipboard] = useState(false);
+    const [total, setTotal] = useState(0);
 
     const handleClose = () => {
         setShow(false);
@@ -48,15 +50,7 @@ function DepositModalRow(props) {
     }
 
     const handleShow = () => {
-        setAmountInUsdt(0);
-        setAmountInCoin(0);
-        setInputUsdt(false);
-        setCopiedToClipboard(false);
-        setCoin(USD);
-        setAddr("Fetching address...");
-        fetchAddr(coin).then( res => {
-            setAddr(res.data);
-        });    
+        setTotal( countTotal(props.walletData) );
         setShow(true);
     }
 
@@ -90,10 +84,10 @@ function DepositModalRow(props) {
         setInputUsdt(!inputUsdt);
     }
 
-    const handleFocus = (e) => {
-        const inputNode = e.target;
-        inputNode.setSelectionRange(0, inputNode.value.length);
-    }
+    // const handleFocus = (e) => {
+    //     const inputNode = e.target;
+    //     inputNode.setSelectionRange(0, inputNode.value.length);
+    // }
 
     useEffect( () => {
         setAmountInUsdt(0);
@@ -107,103 +101,104 @@ function DepositModalRow(props) {
         });    
     }, [coin, show])
 
+
+
     return (
-        <Row>
-            <Col style={{"textAlign": "center", "padding": "8px"}}>
-                {/*0C63E4 E7F1FF */}
-                <Button style={{"color": "black", "backgroundColor": "#E7F1FF", "width": "100%"}} onClick={handleShow}> 
-                <b>Buy equity</b>
-                </Button>
-                <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Buy equity in portfolio</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Row>
-                        <Col>
-                            <FloatingLabel controlId="floatingSelect" label="Choose crypto" className="mb-3">
-                                <Form.Select aria-label="Crypto deposit options" onChange={handleSelectCrypto}>
-                                    <option value={USD}>{USD}</option>
-                                    <option value="btc">BTC</option>
-                                    <option value="eth">ETH</option>
-                                </Form.Select>
-                            </FloatingLabel>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
-                            <FloatingLabel
-                                controlId="floatingInput"
-                                label={inputLabel(inputUsdt)}
-                                className="mb-3">
-                                <Form.Control autoComplete="off" onFocus={handleFocus} onChange={handleAmount} type="text" placeholder="0" value={amountInCoinOrUsdt(inputUsdt)}/>
-                            </FloatingLabel>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col style={{"verticalAlign": "middle", "alignContent":"center", "textAlign": "center"}}>
-                        <Image onClick={handleSwitchInput} className="mb-3" src="swap2.svg" />
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
-                            <FloatingLabel
-                                controlId="floatingInput"
-                                label={inputLabel(!inputUsdt)}
-                                className="mb-3">
-                                <Form.Control type="text" placeholder="0.00" readOnly value={calculatePrice(inputUsdt, amountInCoinOrUsdt(inputUsdt))}/>
-                            </FloatingLabel>
-                        </Col>
-                    </Row>
-                    <Row style={{"padding": "16px", "textAlign": "left"}}>
-                        <Col>
-                            <FloatingLabel
-                                controlId="floatingInput"
-                                label="Portfolio size"
-                                className="mb-3">
-                                    <Form.Control type="text" placeholder="0.00" readOnly value={displayNumber(props.total) + " USDT"}/>
-                            </FloatingLabel>
-                        </Col>
-                        <Col>
-                            <FloatingLabel
-                                controlId="floatingInput"
-                                label="Equity"
-                                className="mb-3">
-                                    <Form.Control type="text" placeholder="0.00" readOnly value={displayNumber(round(calculateShare() * 100)) + "%"}/>
-                            </FloatingLabel>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
-                            <FloatingLabel
-                                controlId="floatingInput"
-                                label={"Deposit address " + coin}
-                                className="mb-3">
-                                    <Form.Control onClick={handleCopy} type="text" placeholder="0.00" readOnly
-                                    value={addr["address"]}/>
-                            </FloatingLabel>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col style={{"paddingLeft": "16px"}}>
-                            {(copiedToClipboard ? "Copied to clipboard!" : "Click address to copy.")}
-                        </Col>
-                        <Col style={{"paddingLeft": "16px"}}>
-                            <a style={{"color": "black"}} target="_blank" rel="noreferrer" href={addr["url"]}>View in blockchain</a>                            
-                        </Col>
-                    </Row>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Row>
-                        <Col>
-                            <b>NOTE</b>
-                            <br />Actual share is subject to price changes. The final amount is determined at the moment of successful deposit transaction.
-                        </Col>
-                    </Row>
-                </Modal.Footer>
-                </Modal>
-            </Col>
-        </Row>
+        <>
+        <Button style={{"color": "black", "backgroundColor": "#E7F1FF", "width": "100%"}} onClick={handleShow}> 
+        <b>Buy equity</b>
+        </Button>
+
+        <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+            <Modal.Title>Buy equity in portfolio</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+            <Row>
+                <Col>
+                    <FloatingLabel controlId="floatingSelect" label="Choose crypto" className="mb-3">
+                        <Form.Select aria-label="Crypto deposit options" onChange={handleSelectCrypto}>
+                            <option value={USD}>{USD}</option>
+                            <option value="btc">BTC</option>
+                            <option value="eth">ETH</option>
+                        </Form.Select>
+                    </FloatingLabel>
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <FloatingLabel
+                        controlId="floatingInput"
+                        label={inputLabel(inputUsdt)}
+                        className="mb-3">
+                        <Form.Control autoComplete="off" autoFocus onChange={handleAmount} type="text" placeholder="0" value={amountInCoinOrUsdt(inputUsdt)}/>
+                            {/* onFocus={handleFocus}  */}
+                    </FloatingLabel>
+                </Col>
+            </Row>
+            <Row>
+                <Col style={{"verticalAlign": "middle", "alignContent":"center", "textAlign": "center"}}>
+                <Image onClick={handleSwitchInput} className="mb-3" src="swap2.svg" />
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <FloatingLabel
+                        controlId="floatingInput"
+                        label={inputLabel(!inputUsdt)}
+                        className="mb-3">
+                        <Form.Control type="text" placeholder="0.00" readOnly value={calculatePrice(inputUsdt, amountInCoinOrUsdt(inputUsdt))}/>
+                    </FloatingLabel>
+                </Col>
+            </Row>
+            <Row style={{"padding": "16px", "textAlign": "left"}}>
+                <Col>
+                    <FloatingLabel
+                        controlId="floatingInput"
+                        label="Portfolio size"
+                        className="mb-3">
+                            <Form.Control type="text" placeholder="0.00" readOnly value={displayNumber(total) + " USDT"}/>
+                    </FloatingLabel>
+                </Col>
+                <Col>
+                    <FloatingLabel
+                        controlId="floatingInput"
+                        label="Equity"
+                        className="mb-3">
+                            <Form.Control type="text" placeholder="0.00" readOnly value={displayNumber(round(calculateShare() * 100)) + "%"}/>
+                    </FloatingLabel>
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <FloatingLabel
+                        controlId="floatingInput"
+                        label={"Deposit address " + coin}
+                        className="mb-3">
+                            <Form.Control onClick={handleCopy} type="text" placeholder="0.00" readOnly
+                            value={addr["address"]}/>
+                    </FloatingLabel>
+                </Col>
+            </Row>
+            <Row>
+                <Col style={{"paddingLeft": "16px"}}>
+                    {(copiedToClipboard ? "Copied to clipboard!" : "Click address to copy.")}
+                </Col>
+                <Col style={{"paddingLeft": "16px"}}>
+                    <a style={{"color": "black"}} target="_blank" rel="noreferrer" href={addr["url"]}>View in blockchain</a>                            
+                </Col>
+            </Row>
+        </Modal.Body>
+        <Modal.Footer>
+            <Row>
+                <Col>
+                    <b>NOTE</b>
+                    <br />Actual share is subject to price changes. The final amount is determined at the moment of successful deposit transaction.
+                </Col>
+            </Row>
+        </Modal.Footer>
+        </Modal>
+        </>
     );
 
     function copyToClipboard(text) {
@@ -247,9 +242,12 @@ function DepositModalRow(props) {
     // }
 
     function calculateShare() {
-        const totalPlusAmount = parseFloat(props.total) + parseFloat(amountInUsdt);
-        const share = amountInUsdt / totalPlusAmount;
-        return share;
+        if (amountInUsdt && total) {
+            const totalPlusAmount = parseFloat(total) + parseFloat(amountInUsdt);
+            const share = amountInUsdt / totalPlusAmount;
+            return share;
+        }
+        return 0;
     }
 
     function calculatePriceInCoin(amount) {
@@ -277,4 +275,4 @@ function DepositModalRow(props) {
 
   }
   
-  export default DepositModalRow;
+  export default DepositModal;

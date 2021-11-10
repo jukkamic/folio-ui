@@ -26,19 +26,17 @@ const netPercentage = (og, share, total) => {
   }
 };
 
-const MyPortfolioRow = (props) => {
+const Portfolio = (props) => {
   return (
-    <Accordion defaultActiveKey="0">
-      <Accordion.Item eventKey="0">
-      <Accordion.Header>
-        <span style={{"color": "black"}}><b>{props.name}</b> {props.loading? "Loading" : netPercentage(props.og, props.share, props.total)}</span>
-      </Accordion.Header>
-      <Accordion.Body>
-      {props.loading ? "Loading" : Intl.NumberFormat('en-US').format(shareValue(props.share, props.total))} USDT
-      <br />{props.loading? "Loading" : netUSDT(props.og, props.share, props.total)}
-      </Accordion.Body>
+      <Accordion.Item eventKey={props.email}>
+        <Accordion.Header>
+          <span style={{"color": "black"}}><b>{props.name}</b> {props.loading? "Loading" : netPercentage(props.og, props.share, props.total)}</span>
+        </Accordion.Header>
+        <Accordion.Body>
+        {props.loading ? "Loading" : Intl.NumberFormat('en-US').format(shareValue(props.share, props.total))} USDT
+        <br />{props.loading? "Loading" : netUSDT(props.og, props.share, props.total)}
+        </Accordion.Body>
       </Accordion.Item>
-    </Accordion>
 
     // <Card fluid style={{}}>
     //   <Card.Body>
@@ -51,4 +49,4 @@ const MyPortfolioRow = (props) => {
   );
 }
 
-export default MyPortfolioRow;
+export default Portfolio;

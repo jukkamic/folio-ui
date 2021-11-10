@@ -68,8 +68,8 @@ const getChartData = (canvas, props) => {
 const MyDoughnut = (props) => {
     return(
         <Doughnut
-            height="450"
-            width="450"
+            height="400"
+            width="400"
             data={(canvas) => getChartData(canvas, props)} 
             options={{
                 cutout: "25%",

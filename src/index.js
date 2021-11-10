@@ -1,26 +1,18 @@
-import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import 'bootstrap/dist/css/bootstrap.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { Auth0Provider } from "@auth0/auth0-react";
+import { BrowserRouter } from "react-router-dom";
+import Auth0ProviderWithHistory from './auth/auth0-provider-with-history';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Auth0Provider
-      domain="dev-88-mri1m.us.auth0.com"
-      clientId="JzTCnrphpHGiksYWnZNEtCgTq5tXsODZ"
-      // ViSWsNBtyRoviyX6Gt32FbkG9VgbtCGF
-      redirectUri={window.location.origin}
-//      audience="https://dev-88-mri1m.us.auth0.com/api/v2/"
-      audience="https://folio.kotkis.fi/"
-      scope="read:all"
-      useRefreshTokens={true}
-      >
-
+  <BrowserRouter>
+    <Auth0ProviderWithHistory>
       <App />
-    </Auth0Provider>
-  </React.StrictMode>,
+    </Auth0ProviderWithHistory>
+  </BrowserRouter>
+  ,
   document.getElementById('root')
 );
 

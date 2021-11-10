@@ -1,13 +1,15 @@
 /* (A) STANDARD ROW HEIGHT */
 .vwrap, .vitem {
-  height: 30px;
-  line-height: 30px;
+  height: 40px;
+  line-height: 40px;
 }
 
 /* (B) FIXED WRAPPER */
 .vwrap {
   overflow: hidden; /* HIDE SCROLL BAR */
-  background: #E7F1FF;
+  background: #FFD580;
+  /* background: orange; */
+  border: 2px solid orange;
 }
 
 /* (C) TICKER ITEMS */
@@ -18,9 +20,9 @@
 .vmove { position: relative; }
 @keyframes tickerv {
   0% { bottom: 0; } /* FIRST ITEM */
-  25% { bottom: 30px; } /* SECOND ITEM */
-  50% { bottom: 60px; } /* THIRD ITEM */
-  75% { bottom: 90px; } /* FORTH ITEM */
+  25% { bottom: 40px; } /* SECOND ITEM */
+  50% { bottom: 80px; } /* THIRD ITEM */
+  75% { bottom: 120px; } /* FORTH ITEM */
   100% { bottom: 0px; } /* BACK TO FIRST */
 }
 .vmove {
