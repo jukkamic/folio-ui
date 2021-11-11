@@ -27,7 +27,7 @@ function App() {
         scope: "read:all",
       });
       
-      await axios.get(WALLET_URL, {params: {"beth2eth": false}, headers: {Authorization: "Bearer " + token}})
+      await axios.get(WALLET_URL, {headers: {Authorization: "Bearer " + token}})
       .then( (response) => {
         setWalletData(response.data);
       })

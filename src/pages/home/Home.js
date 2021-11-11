@@ -58,7 +58,7 @@ function Home(props) {
                     <Portfolio name="VV" email="varimo@iki.fi" og="162.09" share="0.0613" total={total} />
                 </Accordion>
                 }
-                { user.email == "jukkamic@gmail.com" ? <Blog /> : <></>}
+                { user.email === "jukkamic@gmail.com" ? <Blog /> : <></>}
             </Col>
             <Col md={{"span": 9}}>
               <Accordion defaultActiveKey={mobile}>
