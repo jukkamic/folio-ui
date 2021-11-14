@@ -3,7 +3,7 @@ import { withAuthenticationRequired  } from "@auth0/auth0-react";
 import { MainNav } from './components/MainNav';
 import Loading from './components/Loading';
 import Home from './pages/home/Home';
-import { Container } from "react-bootstrap";
+import { Container, Alert } from "react-bootstrap";
 import { Routes, Route, Outlet } from "react-router-dom";
 import ChartPage from './pages/chart/ChartPage';
 import { useAuth0 } from "@auth0/auth0-react";
@@ -30,6 +30,7 @@ function App() {
       await axios.get(WALLET_URL, {headers: {Authorization: "Bearer " + token}})
       .then( (response) => {
         setWalletData(response.data);
+        setError(null);
       })
       .catch( (error) => {
         console.log(error);
@@ -45,14 +46,12 @@ function App() {
     setRefresh(!refresh);
   }, 13000);
 
-
-  if (error) {
-    return "Error";
-  }
-
   return (
       <Container fluid>
         <MainNav walletData={walletData} />
+        {error ? 
+        <Alert variant="danger" closeVariant="dark" dismissible={true} onClose={ () => {setError(null)}} >{error.message}</Alert>
+        : <></> }
         <Routes>
           <Route path="/" element={<Home loading={loading} walletData={walletData}/>} />
           <Route path="charts" element={<ChartPage />} />
