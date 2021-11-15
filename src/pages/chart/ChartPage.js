@@ -1,7 +1,7 @@
 import { withAuthenticationRequired  } from "@auth0/auth0-react";
 import {Spinner} from "../../components/Spinner";
 import {Line} from "react-chartjs-2";
-import { Toast } from "react-bootstrap";
+import { Toast, Form } from "react-bootstrap";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -33,6 +33,7 @@ function ChartPage() {
     const [btc_values, setBtcValues] = useState([]);
     const [btc_usdt_values, setBtcUsdtValues] = useState([]);
     const [showToast, setShowToast] = useState(true);
+    const [timeDays, setTimeDays] = useState(7);
 
     useEffect( () => {
         async function fetchHistory() {
@@ -41,7 +42,7 @@ function ChartPage() {
                 scope: "read:all",
             });
             
-            await axios.get(WALLET_URL + "history/30/", {headers: {Authorization: "Bearer " + token}})
+            await axios.get(WALLET_URL + "history/" + timeDays, {headers: {Authorization: "Bearer " + token}})
             .then( (history) => {
                 const history_json = JSON.parse(history.data);
 
@@ -74,7 +75,7 @@ function ChartPage() {
             );
         }
         fetchHistory();
-    },[getAccessTokenSilently]);
+    },[getAccessTokenSilently, timeDays]);
 
 
     const data = {
@@ -115,6 +116,13 @@ function ChartPage() {
             <Toast show={showToast} onClose={() => setShowToast(false)}>
                 <Toast.Header>Click the chart headers to toggle visibility.</Toast.Header>
             </Toast>
+            <Form>
+                <Form.Label>Select chart period</Form.Label>
+                <Form.Group onChange={(e) => setTimeDays(e.target.id)} className="mb-6" controlId="selectDays">
+                    <Form.Check checked={timeDays == 7} inline id="7" name="days" type="radio" label="7 days"></Form.Check>
+                    <Form.Check checked={timeDays == 30} inline id="30" name="days" type="radio" label="30 days"></Form.Check>
+                </Form.Group>
+            </Form>
             <Line data={data} options={options} />
         </>
     )
