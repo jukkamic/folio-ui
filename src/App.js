@@ -1,7 +1,6 @@
 import './App.css';
 import { withAuthenticationRequired  } from "@auth0/auth0-react";
 import { MainNav } from './components/MainNav';
-import Loading from './components/Loading';
 import Home from './pages/home/Home';
 import { Container, Alert } from "react-bootstrap";
 import { Routes, Route, Outlet } from "react-router-dom";
@@ -10,6 +9,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useState, useEffect } from 'react';
 import useInterval from 'react-useinterval';
 import axios from "axios";
+import { Spinner } from './components/Spinner';
 
 const WALLET_URL = process.env.REACT_APP_WALLET_URL;
 
@@ -63,5 +63,5 @@ function App() {
 }
 
 export default withAuthenticationRequired(App, {
-  onRedirecting: () => <Loading />,
+  onRedirecting: () => <><MainNav /><Spinner /></>,
 });

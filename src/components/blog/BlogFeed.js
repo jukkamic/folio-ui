@@ -4,13 +4,6 @@ import { Col, Row } from 'react-bootstrap';
 import {blogApi} from "../services/blogApi";
 import Ticker from 'react-ticker';
 
-
-// const posts = [
-//     {"title": "first post", "content": "hello world"},
-//     {"title": "second post", "content": "still here?"},
-//     {"title": "third post", "content": "always as bitcoin"},
-// ]
-
 function BlogFeed() {
     const [posts, setPosts] = useState([{"title": "Waiting for announcements..."}]);
     const { getAccessTokenSilently } = useAuth0();

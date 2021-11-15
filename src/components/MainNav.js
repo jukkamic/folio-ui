@@ -1,4 +1,4 @@
-import { Container, Navbar, Row, Col } from "react-bootstrap";
+import { Container, Navbar, Nav, Row, Col } from "react-bootstrap";
 import AuthenticationButton from "./auth/AuthenticationButton";
 
 export function MainNav() {
@@ -16,8 +16,11 @@ export function MainNav() {
           height="30"
           className="d-inline-block align-top"
         />{' '}
-      Kotkis Folio
       </Navbar.Brand>
+
+      <Nav.Link href="/">Home</Nav.Link>
+
+      <Nav.Link href="/charts">Charts</Nav.Link>
 
       <Navbar.Collapse className="justify-content-end">
           <AuthenticationButton />
