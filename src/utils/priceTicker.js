@@ -34,13 +34,13 @@ export function createPriceTickerItems(data) {
             if (asset !== "BUSD" && asset !== "USDT") {
                 var url = "";
                 if (asset === "TEL") {
-                    url = "https://coinmarketcap.com/currencies/telcoin/";
+                    url = "https://trade.kucoin.com/trade/TEL-USDT";
                 }
                 else if (asset === "BETH") {
                     url = "https://www.binance.com/en/trade/BETH_ETH";
                 }
                 else {
-                    url = "https://www.binance.com/en/trade/" + asset + "_USDT";
+                    url = "https://www.binance.com/en/trade/" + asset + "_BUSD";
                 }
                 tickerItems.push( (<Tick key={asset} symbol={asset} price={rounded} url={url} change={change}/>) );
             }

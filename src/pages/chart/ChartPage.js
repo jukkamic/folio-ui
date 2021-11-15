@@ -34,7 +34,7 @@ function ChartPage() {
     const [btc_values, setBtcValues] = useState([]);
     const [btc_usdt_values, setBtcUsdtValues] = useState([]);
     const [showToast, setShowToast] = useState(true);
-    const [timeDays, setTimeDays] = useState(7);
+    const [timeDays, setTimeDays] = useState("7");
 
     useEffect( () => {
         async function fetchHistory() {
