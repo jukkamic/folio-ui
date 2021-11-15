@@ -119,8 +119,8 @@ function ChartPage() {
             <Form>
                 <Form.Label>Select chart period</Form.Label>
                 <Form.Group onChange={(e) => setTimeDays(e.target.id)} className="mb-6" controlId="selectDays">
-                    <Form.Check checked={timeDays == 7} inline id="7" name="days" type="radio" label="7 days"></Form.Check>
-                    <Form.Check checked={timeDays == 30} inline id="30" name="days" type="radio" label="30 days"></Form.Check>
+                    <Form.Check checked={timeDays === 7} inline id="7" name="days" type="radio" label="7 days"></Form.Check>
+                    <Form.Check checked={timeDays === 30} inline id="30" name="days" type="radio" label="30 days"></Form.Check>
                 </Form.Group>
             </Form>
             <Line data={data} options={options} />
