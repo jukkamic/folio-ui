@@ -1,7 +1,7 @@
 import { withAuthenticationRequired  } from "@auth0/auth0-react";
 import {Spinner} from "../../components/Spinner";
 import {Line} from "react-chartjs-2";
-import { Toast, Form } from "react-bootstrap";
+import { Row, Col, Form } from "react-bootstrap";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -15,12 +15,22 @@ const options = {
     scales: {
       btc_usdt: {
         position: "left",
+        display: false,
       },
       folio_usdt: {
           position: "left",
       },
       folio_btc: {
           position: "right",
+          grid: {
+              color: function (context) {
+                  if (context.tick.value === 1) {
+                      return "#000000";
+                  } else {
+                      return 'rgb(201, 203, 207)';
+                  }
+              }
+          }
       }
     }
   };
@@ -30,9 +40,8 @@ function ChartPage() {
     const [labels, setLabels] = useState([]);
     const [usdt_values, setUsdtValues] = useState([]);
     const [btc_usdt_values, setBtcUsdtValues] = useState([]);
-    const [btc_values, setBtcValues] = useState([]);
+    // const [btc_values, setBtcValues] = useState([]);
     const [folio_btc_values, setFolioBtcValues] = useState([]);
-    const [showToast, setShowToast] = useState(true);
     const [timeDays, setTimeDays] = useState("7");
 
     useEffect( () => {
@@ -58,11 +67,11 @@ function ChartPage() {
                 });
                 setUsdtValues(usdt_array.reverse());
 
-                var btc_array = [];
-                btc_array = history_json.map(point => {
-                    return point.value_btc;
-                });
-                setBtcValues(btc_array.reverse());
+                // var btc_array = [];
+                // btc_array = history_json.map(point => {
+                //     return point.value_btc;
+                // });
+                // setBtcValues(btc_array.reverse());
 
                 var btc_usdt_array = [];
                 btc_usdt_array = history_json.map(point => {
@@ -120,17 +129,22 @@ function ChartPage() {
 
     return(
         <>
-            <Toast show={showToast} onClose={() => setShowToast(false)}>
-                <Toast.Header>Click the chart headers to toggle visibility.</Toast.Header>
-            </Toast>
+        <Row>
+            <Col md={12}>
             <Form>
                 <Form.Label>Select chart period</Form.Label>
                 <Form.Group onChange={(e) => setTimeDays(e.target.id)} className="mb-6" controlId="selectDays">
                     <Form.Check checked={timeDays === "7"} inline id="7" name="days" type="radio" label="7 days"></Form.Check>
                     <Form.Check checked={timeDays === "30"} inline id="30" name="days" type="radio" label="30 days"></Form.Check>
                 </Form.Group>
-            </Form>
-            <Line data={data} options={options} />
+                </Form>
+            </Col>
+        </Row>
+        <Row>
+            <Col md={12}>
+            <Line data={data} options={options} height="100%"/>
+            </Col>
+        </Row>
         </>
     )
 }
