@@ -13,16 +13,14 @@ const WALLET_URL = process.env.REACT_APP_WALLET_URL;
   
 const options = {
     scales: {
-      btc: {
-        position: "right",
-      },
-      usdt: {
-          position: "left",
-          beginAtZero: true,
-          
-      },
       btc_usdt: {
+        position: "left",
+      },
+      folio_usdt: {
           position: "left",
+      },
+      folio_btc: {
+          position: "right",
       }
     }
   };
@@ -31,8 +29,9 @@ function ChartPage() {
     const {getAccessTokenSilently} = useAuth0();
     const [labels, setLabels] = useState([]);
     const [usdt_values, setUsdtValues] = useState([]);
-    const [btc_values, setBtcValues] = useState([]);
     const [btc_usdt_values, setBtcUsdtValues] = useState([]);
+    const [btc_values, setBtcValues] = useState([]);
+    const [folio_btc_values, setFolioBtcValues] = useState([]);
     const [showToast, setShowToast] = useState(true);
     const [timeDays, setTimeDays] = useState("7");
 
@@ -48,28 +47,35 @@ function ChartPage() {
                 const history_json = JSON.parse(history.data);
 
                 var labelArray = [];
-                history_json.map(point => {
-                    labelArray.push(moment(point.time).format('DD.MM HH:mm'));
+                labelArray = history_json.map(point => {
+                    return moment(point.time).format('DD.MM HH:mm');
                 });
                 setLabels(labelArray.reverse());
 
                 var usdt_array = [];
-                history_json.map(point => {
-                    usdt_array.push(point.value_usdt);
+                usdt_array = history_json.map(point => {
+                    return point.value_usdt;
                 });
                 setUsdtValues(usdt_array.reverse());
 
                 var btc_array = [];
-                history_json.map(point => {
-                    btc_array.push(point.value_btc);
+                btc_array = history_json.map(point => {
+                    return point.value_btc;
                 });
                 setBtcValues(btc_array.reverse());
 
                 var btc_usdt_array = [];
-                history_json.map(point => {
-                    btc_usdt_array.push(point.btc_usdt);
+                btc_usdt_array = history_json.map(point => {
+                    return point.btc_usdt;
                 });
                 setBtcUsdtValues(btc_usdt_array.reverse());
+
+                const ratio = btc_usdt_array[0] / usdt_array[0];
+                var folio_btc_normalized = [];
+                folio_btc_normalized = usdt_array.map( function(n, i) {
+                    return ratio * n / btc_usdt_array[i];
+                });
+                setFolioBtcValues(folio_btc_normalized);
             }).catch( (err) => {
                 console.log(err);
             }).finally( 
@@ -83,28 +89,28 @@ function ChartPage() {
         labels: labels,
         datasets: [
           {
-            label: "Folio USDT",
+            label: "Folio",
             data: usdt_values,
             fill: false,
             backgroundColor: 'rgb(255, 99, 132)',
             borderColor: 'rgba(255, 99, 132, 0.2)',
-            yAxisID: 'usdt',
+            yAxisID: 'folio_usdt',
           },
           {
-            label: "Folio BTC",
-            data: btc_values,
-            fill: false,
-            backgroundColor: 'rgb(0, 255, 132)',
-            borderColor: 'rgba(0, 255, 132, 0.2)',
-            yAxisID: 'btc',
-          },
-          {
-            label: "BTC USDT",
+            label: "BTC",
             data: btc_usdt_values,
             fill: false,
             backgroundColor: 'rgb(0, 0, 255)',
             borderColor: 'rgba(0, 0, 255, 0.2)',
             yAxisID: 'btc_usdt',
+          },
+          {
+            label: "Folio BTC",
+            data: folio_btc_values,
+            fill: false,
+            backgroundColor: 'rgb(0, 255, 132)',
+            borderColor: 'rgba(0, 255, 132, 0.2)',
+            yAxisID: 'folio_btc',
           },
         ],
       }; 
