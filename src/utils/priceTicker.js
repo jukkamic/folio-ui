@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Tick = (props) => {
-    const price = (props.price === "" ? "" : Intl.NumberFormat('en-US').format(props.price));
+    const price = (props.price === "" ? "" : Intl.NumberFormat('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 3}).format(props.price));
     const change = Math.round(parseFloat((props.change) + Number.EPSILON) * 100) / 100;
     const up = (change >= 0) ? true : false;
     return (
@@ -29,7 +29,11 @@ export function createPriceTickerItems(data) {
         for (const entry of Object.entries(data)) {
             const asset = entry[1]["asset"];
             const price = parseFloat(entry[1]["price"]);
-            const rounded = Math.round((price + Number.EPSILON) * 100) / 100;
+            var divisor = 100;
+            if (price < 10) {
+                divisor = 1000;
+            }
+            const rounded = Math.round((price + Number.EPSILON) * divisor) / divisor;
             const change = entry[1]["change"]; 
             if (asset !== "BUSD" && asset !== "USDT") {
                 var url = "";
