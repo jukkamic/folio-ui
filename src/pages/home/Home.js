@@ -54,7 +54,8 @@ function Home(props) {
             <Col md={{"span": 3}} style={{"paddingRight": "8px", "textAlign": "right"}}>
                 {loading ? <Spinner /> :
                 <Accordion defaultActiveKey={user.email}>
-                    <Portfolio name="Companyman" email="jukkamic@gmail.com" og="2205.24" share="0.95108648589" total={total} />
+                  {/* 2205.24 + 381.26 = 2586.5 */}
+                    <Portfolio name="Companyman" email="jukkamic@gmail.com" og="2586.50" share="0.95108648589" total={total} />
                     <Portfolio name="VV" email="varimo@iki.fi" og="162.09" share="0.0489135141" total={total} />
                 </Accordion>
                 }
