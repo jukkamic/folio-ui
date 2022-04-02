@@ -5,6 +5,7 @@ import Home from './pages/home/Home';
 import { Container, Alert } from "react-bootstrap";
 import { Routes, Route, Outlet } from "react-router-dom";
 import ChartPage from './pages/chart/ChartPage';
+import PricePage from './pages/backend/PricePage';
 import { useAuth0 } from "@auth0/auth0-react";
 import { useState, useEffect } from 'react';
 import useInterval from 'react-useinterval';
@@ -48,11 +49,14 @@ function App() {
 
   return (
       <Container fluid>
-        <MainNav walletData={walletData} />
+        <Routes>
+          <Route path="price" element={<PricePage />} />
+        </Routes>
         {error ? 
         <Alert variant="danger" closeVariant="dark" dismissible={true} onClose={ () => {setError(null)}} >{error.message}</Alert>
         : <></> }
         <Routes>
+          <MainNav walletData={walletData} />
           <Route path="/" element={<Home loading={loading} walletData={walletData}/>} />
           <Route path="charts" element={<ChartPage />} />
         </Routes>
