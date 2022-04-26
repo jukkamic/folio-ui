@@ -124,9 +124,6 @@ function ChartPage() {
         ],
       }; 
 
-      console.log("labels: " + data.labels)
-      console.log("data: " + data.datasets[0].data)
-
     return(
         <>
         <Row>
