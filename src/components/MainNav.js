@@ -1,7 +1,9 @@
 import { Container, Navbar, Nav, Row, Col } from "react-bootstrap";
 import AuthenticationButton from "./auth/AuthenticationButton";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export function MainNav() {
+  const {user} = useAuth0();
 
     return (
         <Row>
@@ -21,6 +23,8 @@ export function MainNav() {
       <Nav.Link href="/">Home</Nav.Link>
 
       <Nav.Link href="/charts">Charts</Nav.Link>
+
+      { user && user.email === "jukkamic@gmail.com" ? <Nav.Link href="/binance">Binance</Nav.Link> : <></> }
 
       <Navbar.Collapse className="justify-content-end">
           <AuthenticationButton />

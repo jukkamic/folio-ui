@@ -1,11 +1,11 @@
 import { withAuthenticationRequired  } from "@auth0/auth0-react";
+import { MainNav } from "../../components/MainNav";
 import {Spinner} from "../../components/Spinner";
 import {Line} from "react-chartjs-2";
 import { Row, Col, Form } from "react-bootstrap";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { MainNav } from "../../components/MainNav";
 import moment from "moment";
 
 const WALLET_URL = process.env.REACT_APP_WALLET_URL;
